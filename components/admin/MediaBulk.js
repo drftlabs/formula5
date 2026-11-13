@@ -34,8 +34,8 @@ export default function MediaBulk({ initial = [] }) {
       {errs.length > 0 && <div className="flash err"><b>{errs.length} failed</b><ul style={{ margin: "6px 0 0 18px", fontSize: 12 }}>{errs.map((e, i) => <li key={i}>{e}</li>)}</ul></div>}
       {items.length > 0 && <>
         <div className="bar-actions" style={{ margin: "16px 0" }}>
-          <button type="button" className="abtn sm" onClick={() => download("taeken-product-image-links.csv", productsCsv())}>⬇ CSV grouped by product (image_1, image_2…)</button>
-          <button type="button" className="abtn sm ghost" onClick={() => download("taeken-photo-links.csv", filesCsv())}>⬇ CSV: one row per photo</button>
+          <button type="button" className="abtn sm" onClick={() => download("formula5-product-image-links.csv", productsCsv())}>⬇ CSV grouped by product (image_1, image_2…)</button>
+          <button type="button" className="abtn sm ghost" onClick={() => download("formula5-photo-links.csv", filesCsv())}>⬇ CSV: one row per photo</button>
           <button type="button" className="abtn sm ghost" onClick={() => copy(items.map((i) => i.url).join("\n"), "all")}>{copied === "all" ? "Copied ✓" : "Copy all links"}</button>
           <span className="mut" style={{ fontSize: 12 }}>{items.length} photos</span>
         </div>

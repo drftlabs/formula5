@@ -34,7 +34,7 @@ export default function TrackModal() {
         <div className="qc-body">
           <form className="tm-form" onSubmit={submit}>
             <label htmlFor="tm-o">Order number</label>
-            <input id="tm-o" value={num} onChange={(e) => setNum(e.target.value)} placeholder="TK-1001" autoCapitalize="characters" autoComplete="off" required autoFocus />
+            <input id="tm-o" value={num} onChange={(e) => setNum(e.target.value)} placeholder="F5-1001" autoCapitalize="characters" autoComplete="off" required autoFocus />
             <label htmlFor="tm-e">Email used at checkout</label>
             <input id="tm-e" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" autoComplete="email" required />
             <button className="btn" disabled={busy}>{busy ? "Looking…" : "Track order"}</button>
@@ -44,7 +44,7 @@ export default function TrackModal() {
             <article className="order tm-order">
               <div className="order-top"><div><b>{order.order_number}</b><div className="tm-sub">{dayFmt(order.created_at)} · {inr(order.total)}</div></div><span className={"badge " + order.status}>{STATUS[order.status]}</span></div>
               {idx >= 0 && <div className="steps">{STEPS.map((s, i) => <div key={s} className={i <= idx ? "on" : ""}>{STATUS[s]}</div>)}</div>}
-              <div className="o-items">{(order.items || []).map((i, k) => <div key={k}>{i.name} · UK {i.size}{i.color ? ` · ${i.color}` : ""} × {i.qty}</div>)}</div>
+              <div className="o-items">{(order.items || []).map((i, k) => <div key={k}>{i.name} · Pack {i.size}{i.color ? ` · ${i.color}` : ""} × {i.qty}</div>)}</div>
               {order.tracking_number && <div className="track"><b>Tracking</b><br />{order.courier || "Courier"}: {order.tracking_number}{order.tracking_url && <> · <a href={order.tracking_url} target="_blank" rel="noopener">Track package</a></>}</div>}
             </article>
           )}

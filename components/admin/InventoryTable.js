@@ -16,14 +16,14 @@ export default function InventoryTable({ products, sizeKeys }) {
   const unitsAll = products.reduce((t, p) => t + tot(p.id), 0);
   return (
     <>
-      <div className="cards"><div className="stat"><b>{products.length}</b><span>Products</span></div><div className="stat"><b>{unitsAll}</b><span>Pairs in stock</span></div><div className="stat"><b>{products.filter((p) => tot(p.id) === 0).length}</b><span>Out of stock</span></div></div>
+      <div className="cards"><div className="stat"><b>{products.length}</b><span>Products</span></div><div className="stat"><b>{unitsAll}</b><span>Units in stock</span></div><div className="stat"><b>{products.filter((p) => tot(p.id) === 0).length}</b><span>Out of stock</span></div></div>
       <div className="bar-actions">
         <input className="in" style={{ width: 240 }} placeholder="Search name or SKU" value={q} onChange={(e) => setQ(e.target.value)} />
         <label className="chk" style={{ margin: 0 }}><input type="checkbox" checked={only} onChange={(e) => setOnly(e.target.checked)} />Only low / sold-out sizes</label>
         <button className="abtn" disabled={!n || pending} onClick={() => start(async () => { const r = await saveInventory(Object.keys(dirty).map((id) => ({ id, sizes: vals[id] }))); if (r.error) setMsg({ err: r.error }); else { setMsg({ ok: `Saved ${n} product(s)` }); setDirty({}); router.refresh(); } })}>{pending ? "Saving…" : n ? `Save ${n} change${n > 1 ? "s" : ""}` : "No changes"}</button>
         {msg && <span className={"flash" + (msg.err ? " err" : "")} style={{ margin: 0 }}>{msg.err || msg.ok}</span>}
       </div>
-      <div className="tblwrap"><table className="tbl inv"><thead><tr><th>Product</th>{sizeKeys.map((s) => <th key={s}>UK {s}</th>)}<th>Total</th></tr></thead><tbody>
+      <div className="tblwrap"><table className="tbl inv"><thead><tr><th>Product</th>{sizeKeys.map((s) => <th key={s}>Pack {s}</th>)}<th>Total</th></tr></thead><tbody>
         {list.map((p) => <tr key={p.id} className={dirty[p.id] ? "dirty" : ""}><td><Link href={`/admin/products/${p.id}`}><b>{p.name}</b></Link><br /><span className="mut">{p.sku || ""}</span></td>
           {sizeKeys.map((s) => { const v = Number(vals[p.id]?.[s] || 0); return <td key={s}><input className={"in qty" + (v === 0 ? " zero" : v <= (p.low_stock ?? 3) ? " low" : "")} type="number" min="0" value={vals[p.id]?.[s] ?? 0} onChange={(e) => set(p.id, s, e.target.value)} aria-label={`${p.name} UK ${s}`} /></td>; })}
           <td><b>{tot(p.id)}</b></td></tr>)}

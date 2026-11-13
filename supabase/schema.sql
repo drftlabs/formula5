@@ -1,5 +1,5 @@
 -- =====================================================================
--- TAEKEN STORE: database schema. Run ONCE in Supabase → SQL Editor.
+-- FORMULA 5 STORE: database schema. Run ONCE in Supabase → SQL Editor.
 -- Safe to re-run: uses IF NOT EXISTS / OR REPLACE where possible.
 -- =====================================================================
 
@@ -121,7 +121,7 @@ create sequence if not exists public.order_seq start 1001;
 
 create table if not exists public.orders (
   id uuid primary key default gen_random_uuid(),
-  order_number text unique not null default ('TK-' || nextval('public.order_seq')),
+  order_number text unique not null default ('F5-' || nextval('public.order_seq')),
   user_id uuid references auth.users(id) on delete set null,
   email text not null,
   phone text,
@@ -237,7 +237,7 @@ create policy "media admin delete" on storage.objects for delete using (bucket_i
 alter table public.products
   add column if not exists sku text,
   add column if not exists barcode text,
-  add column if not exists vendor text default 'Taeken',
+  add column if not exists vendor text default 'Formula 5',
   add column if not exists product_type text default '',
   add column if not exists cost_price int,
   add column if not exists weight_g int,
@@ -290,14 +290,14 @@ insert into public.discounts (code, type, value, min_order) values ('WELCOME10',
 
 -- migration 3
 alter table public.products add column if not exists extra_images text[] not null default '{}';
--- Taeken migration 4: free shipping above Rs 1,499 and delivery in 3-4 working days. Safe to run more than once.
+-- Migration 4: free shipping above Rs 1,499 and delivery in 3-4 working days. Safe to run more than once.
 insert into public.site_settings(key,value) values
  ('free_shipping_min','1499'::jsonb),
  ('delivery_days','"3–4 business days"'::jsonb),
  ('ticker','["Free shipping above ₹1,499", "Drop 01 is live", "Make your mark", "街 Street series 001"]'::jsonb)
 on conflict (key) do update set value=excluded.value, updated_at=now();
 
--- Taeken migration 5: "Large image" homepage block (placed right after the products row). Safe to run more than once.
+-- Migration 5: "Large image" homepage block (placed right after the products row). Safe to run more than once.
 alter table public.blocks drop constraint if exists blocks_type_check;
 alter table public.blocks add constraint blocks_type_check check (type in ('hero','products','banner','collections','story','image'));
 insert into public.blocks(type, title, enabled, sort_order, config)

@@ -22,7 +22,7 @@ export default function Header({ categories = [] }) {
             {menu ? <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></svg> : <svg viewBox="0 0 24 24"><path d="M4 8h16M4 16h16" /></svg>}
           </button>
           <nav className="f5-nav" aria-label="Primary">
-            <Link href="/collections/all">Shop</Link><Link href="/#categories">Categories</Link><Link href="/#concerns">Concerns</Link><Link href="/#formula">The Formula</Link><Link href="/our-story">Our story</Link>
+            <Link href="/products">Shop</Link><Link href="/#categories">Categories</Link><Link href="/#concerns">Concerns</Link><Link href="/ingredients">Hero actives</Link><Link href="/our-story">Our story</Link>
           </nav>
         </div>
         <Link className="f5-logo" href="/" aria-label="Formula 5, home"><img src="/logo.png" alt="Formula 5" width="816" height="208" /></Link>
@@ -35,7 +35,7 @@ export default function Header({ categories = [] }) {
         </div>
         <div id="f5menu" className={"f5-menu" + (menu ? " open" : "")} onClick={() => setMenu(false)} inert={menu ? undefined : ""}>
           <div className="big">
-            <Link href="/collections/all">Shop all<Chev /></Link><Link href="/#concerns">Shop by concern<Chev /></Link><Link href="/#formula">The Formula<Chev /></Link><Link href="/our-story">Our story<Chev /></Link>
+            <Link href="/products">Shop all<Chev /></Link><Link href="/#concerns">Shop by concern<Chev /></Link><Link href="/ingredients">Hero actives<Chev /></Link><Link href="/our-story">Our story<Chev /></Link>
           </div>
           <h4>Categories</h4>
           <div className="small">{categories.map((c) => <Link key={c.id} href={`/categories/${c.slug}`} style={{ "--acc": c.accent }}><span><i />{c.name}</span></Link>)}</div>

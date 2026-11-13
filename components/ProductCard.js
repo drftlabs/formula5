@@ -20,7 +20,7 @@ export default function ProductCard({ p, category, accent, tagMap = {} }) {
   const saved = wish.includes(p.id);
   const acc = p.accent || accent || "#B7B7AE";
   const quick = () => {
-    add({ ...p, price: pack.price }, "Pack " + pack.n, 1, false, null, null);
+    add({ ...p, price: pack.price }, String(pack.n), 1, false, null, null);
     setAdded(true); setTimeout(() => setAdded(false), 1600);
   };
   return (

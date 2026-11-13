@@ -27,7 +27,7 @@ export default function RoutineBlock({ c, concerns, products, categories, tags }
     return p ? { name, p, n: i + 1 } : null;
   }).filter(Boolean);
   const total = steps.reduce((t, s) => t + (s.p.packs?.[0]?.price ?? s.p.price), 0);
-  const addAll = () => { steps.forEach((s) => add({ ...s.p, price: s.p.packs?.[0]?.price ?? s.p.price }, "Pack 1", 1, true)); setDone(true); setTimeout(() => setDone(false), 1800); };
+  const addAll = () => { steps.forEach((s) => add({ ...s.p, price: s.p.packs?.[0]?.price ?? s.p.price }, "1", 1, true)); setDone(true); setTimeout(() => setDone(false), 1800); };
   return (
     <section className="f5-sec f5-band-warm" id="routine" aria-label={c.title}>
       <div className="f5-wrap">

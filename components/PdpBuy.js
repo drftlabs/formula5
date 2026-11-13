@@ -12,8 +12,8 @@ export default function PdpBuy({ p, packs, sold, tagline, top = [] }) {
   useEffect(() => { const el = actRef.current; if (!el) return; const io = new IntersectionObserver(([e]) => setFloat(!e.isIntersecting && e.boundingClientRect.top < 0), { threshold: 0 }); io.observe(el); return () => io.disconnect(); }, []);
   const k = packs[i], off = pctOff(k.price, k.mrp), saved = wish.includes(p.id);
   const line = () => ({ ...p, price: k.price });
-  const addBag = () => { add(line(), "Pack " + k.n, qty, false); setJust(true); setTimeout(() => setJust(false), 1800); };
-  const buyNow = () => { add(line(), "Pack " + k.n, qty, true); setQc(true); };
+  const addBag = () => { add(line(), String(k.n), qty, false); setJust(true); setTimeout(() => setJust(false), 1800); };
+  const buyNow = () => { add(line(), String(k.n), qty, true); setQc(true); };
   return (
     <div className="pd-buy">
       <div className="pd-price"><b>{inr(k.price)}</b>{k.mrp > k.price && <s>{inr(k.mrp)}</s>}{off > 0 && <em>{off}% off</em>}</div>

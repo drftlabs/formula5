@@ -1,11 +1,11 @@
--- Taeken migration 2: Shopify-style catalogue, COD, discount codes.
+-- Migration 2: Shopify-style catalogue, COD, discount codes.
 -- Safe to run more than once. Run it in Supabase -> SQL Editor.
 
 -- ---- products: more fields ----
 alter table public.products
   add column if not exists sku text,
   add column if not exists barcode text,
-  add column if not exists vendor text default 'Taeken',
+  add column if not exists vendor text default 'Formula 5',
   add column if not exists product_type text default '',
   add column if not exists cost_price int,
   add column if not exists weight_g int,

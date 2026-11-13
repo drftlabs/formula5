@@ -1,4 +1,4 @@
--- Taeken migration 7: admin overhaul (traffic analytics, abandoned carts, order cancellation, team users & roles).
+-- Migration 7: admin overhaul (traffic analytics, abandoned carts, order cancellation, team users & roles).
 -- Safe to run more than once. Run in Supabase -> SQL Editor.
 
 -- 1) Website traffic events (page views, add-to-cart, checkout). No IP addresses are stored, only city/region.
