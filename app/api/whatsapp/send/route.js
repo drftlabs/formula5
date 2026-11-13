@@ -21,6 +21,6 @@ export async function POST(req) {
   const code = !waConfigured() && test ? String(test).slice(0, 4) : newCode();
   const { error } = await sb.from("wa_otps").upsert({ phone, code_hash: hashCode(phone, code), expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(), attempts: 0, sent_at: new Date().toISOString(), verified_until: null });
   if (error) return NextResponse.json({ error: "Setup incomplete: run supabase/migration_9.sql." }, { status: 500 });
-  if (waConfigured()) { try { await sendWhatsAppCode(phone, code); } catch { return NextResponse.json({ error: "Couldn't send the WhatsApp message. Please try again." }, { status: 502 }); } }
+  if (waConfigured()) { try { await sendWhatsAppCode(phone, code); } catch (e) { return NextResponse.json({ error: `Couldn't send the WhatsApp message${e?.meta ? ` (Meta ${e.meta}: ${String(e.message).slice(0, 140)})` : ""}. Please try again.` }, { status: 502 }); } }
   return NextResponse.json({ ok: true });
 }
