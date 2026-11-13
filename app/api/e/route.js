@@ -25,7 +25,7 @@ export async function POST(req) {
     const path = cut(b.path, 200);
     if (!path.startsWith("/") || path.startsWith("/admin") || path.startsWith("/api")) return done();
     let ref = ""; try { ref = b.ref ? new URL(b.ref).hostname.replace(/^www\./, "") : ""; } catch {}
-    if (ref.endsWith("taeken.in")) ref = "";
+    try { if (ref && process.env.NEXT_PUBLIC_SITE_URL && new URL(ref).host === new URL(process.env.NEXT_PUBLIC_SITE_URL).host) ref = ""; } catch {}
     const h = req.headers;
     const w = parseInt(b.w) || 0;
     const device = /ipad|tablet/i.test(ua) ? "Tablet" : /mobi|android|iphone/i.test(ua) ? "Mobile" : w && w < 700 ? "Mobile" : "Desktop";

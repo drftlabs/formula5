@@ -27,10 +27,9 @@ export default async function Success({ searchParams }) {
       {o && total > 0 && <PixelEvent event="Purchase" data={{ value: total, currency: "INR", content_type: "product", order_id: o }} eventId={"purchase-" + o} once={o} />}
       <div className="wrap" style={{ maxWidth: 760 }}>
         <div className="ok-hero center">
-          <span className="stamp" aria-hidden="true">決</span>
           <p className="eyebrow" style={{ justifyContent: "center" }}>Thank you</p>
           <h1 className="page-title">Order <em>confirmed</em></h1>
-          <p className="lead">Your pair is locked in. Make your mark.</p>
+          <p className="lead">Thank you! Your order is confirmed and we're getting it ready.</p>
         </div>
         <div className="ok-card">
           <div className="ok-row"><span>Order number</span><b className="ok-num">{o || "Check your email"}</b></div>
@@ -49,7 +48,7 @@ export default async function Success({ searchParams }) {
           <Link className="btn ghost" href="/account">My orders</Link>
           <Link className="btn ghost" href="/collections/all">Keep shopping</Link>
         </div>
-        <p className="ok-help">Need help? {settings.whatsapp ? <><a href={`https://wa.me/${settings.whatsapp}?text=${encodeURIComponent("Hi Taeken, about order " + o)}`} target="_blank" rel="noopener">WhatsApp us</a> or </> : null}<Link href="/contact">contact us</Link>. {cfg.returnDays}-day returns and {cfg.exchangeDays}-day size exchange apply.</p>
+        <p className="ok-help">Need help? {settings.whatsapp ? <><a href={`https://wa.me/${settings.whatsapp}?text=${encodeURIComponent("Hi Formula 5, about order " + o)}`} target="_blank" rel="noopener">WhatsApp us</a> or </> : null}<Link href="/contact">contact us</Link>.</p>
       </div>
     </div>
   );

@@ -29,7 +29,7 @@ export default async function Account() {
               <article className="order" key={o.id}>
                 <div className="order-top"><div><b>{o.order_number}</b><div style={{ fontSize: 12, color: "var(--concrete)", marginTop: 4 }}>{dayFmt(o.created_at)} · {inr(o.total)}</div></div><span className={"badge " + o.status}>{STATUS[o.status]}</span></div>
                 {idx >= 0 && <div className="steps" aria-label="Order progress">{STEPS.map((s, i) => <div key={s} className={i <= idx ? "on" : ""}>{STATUS[s]}</div>)}</div>}
-                <div className="o-items">{o.items.map((i, k) => <div key={k}>{i.name} · UK {i.size} × {i.qty}</div>)}</div>
+                <div className="o-items">{o.items.map((i, k) => <div key={k}>{i.name} · Pack {i.size} × {i.qty}</div>)}</div>
                 {o.tracking_number && <div className="track"><b>Tracking</b><br />{o.courier || "Courier"}: {o.tracking_number}{o.tracking_url && <> · <a href={o.tracking_url} target="_blank" rel="noopener">Track package</a></>}</div>}
               </article>
             );
@@ -37,7 +37,7 @@ export default async function Account() {
         </div>
       )}
       <section className="wl"><div className="sec-head"><div><p className="eyebrow">Saved</p><h2 className="h2">Your <em>wishlist</em></h2></div></div>
-        {saved.length ? <ProductGrid products={saved} colors={colors} collapse={false} /> : <p className="empty-state">Tap the heart on any pair to save it here.</p>}
+        {saved.length ? <ProductGrid products={saved} colors={colors} collapse={false} /> : <p className="empty-state">Tap the heart on any product to save it here.</p>}
       </section>
     </div></div>
   );

@@ -9,7 +9,7 @@ export default async function Contact() {
     <div className="page"><div className="wrap" style={{ maxWidth: 900 }}>
       <div className="crumbs"><Link href="/">Home</Link><span>Contact</span></div>
       <h1 className="page-title">Contact <em>us</em></h1>
-      <p className="lead">Questions about sizing, an order or a drop? Send a message and we'll reply by email.</p>
+      <p className="lead">Questions about a product or an order? Send a message and we'll reply by email.</p>
       <div className="co" style={{ gridTemplateColumns: "minmax(0,1.3fr) minmax(0,.7fr)" }}>
         <MessageForm type="contact" />
         <div className="prose" style={{ fontSize: 15 }}>

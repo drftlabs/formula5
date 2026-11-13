@@ -6,7 +6,7 @@ import { markPaid } from "@/lib/orders";
 export const dynamic = "force-dynamic";
 
 // Safety net: Razorpay calls this even if the customer closes the tab right after paying.
-// Dashboard → Webhooks → URL: https://www.taeken.in/api/razorpay/webhook, events: payment.captured, order.paid
+// Dashboard → Webhooks → URL: <your-site>/api/razorpay/webhook, events: payment.captured, order.paid
 export async function POST(req) {
   const raw = await req.text();
   const sig = req.headers.get("x-razorpay-signature") || "";

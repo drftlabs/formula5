@@ -1,19 +1,11 @@
-import Link from "next/link";
-import { getProducts, getColors } from "@/lib/data";
-import ProductGrid from "@/components/ProductGrid";
+import Listing, { sortOf } from "@/components/Listing";
+import { getProducts, getCategories, getTags } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Search", robots: { index: false } };
 
 export default async function Search({ searchParams }) {
-  const q = String(searchParams.q || "").slice(0, 80);
-  const [products, colors] = await Promise.all([getProducts({ search: q }), getColors()]);
-  return (
-    <div className="page"><div className="wrap">
-      <div className="crumbs"><Link href="/">Home</Link><span>Search</span></div>
-      <h1 className="page-title">Results for <em>“{q}”</em></h1>
-      <p className="lead">{products.length} {products.length === 1 ? "pair" : "pairs"} found.</p>
-      {products.length ? <ProductGrid products={products} colors={colors} collapse={false} /> : <p className="empty-state">Nothing matched. Try a different name, or <Link className="link" href="/collections/all">browse everything</Link>.</p>}
-    </div></div>
-  );
+  const q = String(searchParams.q || "").slice(0, 80), sort = sortOf(searchParams.sort);
+  const [products, categories, tags] = await Promise.all([getProducts({ search: q, sort }), getCategories(), getTags()]);
+  return <Listing crumbs={[["Search"]]} eyebrow="Search" title={q ? `Results for “${q}”` : "Search"} products={products} categories={[]} tags={tags} sort={sort} path={`/search?q=${encodeURIComponent(q)}`.split("?")[0]} active={{ q }} emptyNote="Nothing matched. Try a different name." />;
 }

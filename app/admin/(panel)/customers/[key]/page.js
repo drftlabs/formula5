@@ -25,7 +25,7 @@ export default async function Customer({ params }) {
   const rep = repeatMap(base);
   const live = orders.filter(VALID), spend = live.reduce((t, o) => t + o.total, 0), cod = live.filter(isCod).length;
   const last = orders[0], a = last.shipping_address || {};
-  const msg = `Hi ${String(last.name || "").split(" ")[0]}, this is Taeken. `;
+  const msg = `Hi ${String(last.name || "").split(" ")[0]}, this is Formula 5. `;
   const addrs = [...new Set(orders.map((o) => { const x = o.shipping_address || {}; return [x.line1, x.line2, x.area, x.city, x.state, x.pin].filter(Boolean).join(", "); }))].slice(0, 3);
   return (
     <>
@@ -46,7 +46,7 @@ export default async function Customer({ params }) {
       <div className="tblwrap"><table className="tbl"><thead><tr><th>Order</th><th>Date</th><th>Items</th><th>Total</th><th>Payment</th><th>Fulfilment</th></tr></thead><tbody>
         {orders.map((o) => <Row key={o.id} href={`/admin/orders/${o.id}`}>
           <td><Link href={`/admin/orders/${o.id}`}><b>{o.order_number}</b></Link><div style={{ marginTop: 4 }}><RepeatBadge r={rep.get(o.id)} /></div></td>
-          <td className="mut">{dateFmt(o.created_at)}</td><td className="mut">{(o.items || []).map((i) => `${i.name} (UK ${i.size})×${i.qty}`).join(", ")}</td>
+          <td className="mut">{dateFmt(o.created_at)}</td><td className="mut">{(o.items || []).map((i) => `${i.name} (Pack ${i.size})×${i.qty}`).join(", ")}</td>
           <td>{inr(o.total)}</td><td><PayBadge o={o} /></td><td><StageBadge o={o} /></td></Row>)}
       </tbody></table></div>
 

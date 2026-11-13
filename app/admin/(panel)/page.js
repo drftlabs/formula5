@@ -97,7 +97,7 @@ export default async function Dashboard({ searchParams }) {
         ))}
       </div>
 
-      {low.length > 0 && <><h2 id="low">Low stock</h2><div className="panel">{low.map((p) => <div key={p.id}><Link href={`/admin/products/${p.id}`}>{p.name}</Link> <span className="mut">· {Object.values(p.sizes || {}).reduce((t, n) => t + Number(n), 0)} pairs left</span></div>)}</div></>}
+      {low.length > 0 && <><h2 id="low">Low stock</h2><div className="panel">{low.map((p) => <div key={p.id}><Link href={`/admin/products/${p.id}`}>{p.name}</Link> <span className="mut">· {Object.values(p.sizes || {}).reduce((t, n) => t + Number(n), 0)} units left</span></div>)}</div></>}
     </>
   );
 }
