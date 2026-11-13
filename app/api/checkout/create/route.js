@@ -4,6 +4,7 @@ import { serviceClient, sessionClient } from "@/lib/supabase/server";
 import { getSettings } from "@/lib/data";
 import { priceOrder, shippingCfg, checkDiscount } from "@/lib/pricing";
 import { markPaid } from "@/lib/orders";
+import { waEnabled, cleanPhone } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 const clean = (v, n = 200) => String(v ?? "").trim().slice(0, n);
@@ -27,6 +28,12 @@ export async function POST(req) {
   if (method === "cod" && !cfg.codEnabled) return NextResponse.json({ error: "Cash on delivery isn't available right now." }, { status: 400 });
   if (method === "online" && (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET)) return NextResponse.json({ error: "Online payments are not configured yet." }, { status: 503 });
 
+  // Cash on delivery with nothing paid upfront must be confirmed on WhatsApp first (when that is switched on)
+  const needWA = waEnabled() && method === "cod" && !(cfg.codPct > 0);
+  if (needWA) {
+    const { data: o } = await sb.from("wa_otps").select("verified_until").eq("phone", cleanPhone(customer.phone)).maybeSingle();
+    if (!o?.verified_until || new Date(o.verified_until) < new Date()) return NextResponse.json({ error: "Please confirm your number on WhatsApp first." }, { status: 403 });
+  }
   const ids = [...new Set(req_items.map((i) => i.id))];
   const { data: prods } = await sb.from("products").select("id,name,price,packs,images,sizes,active,colors").in("id", ids);
   const byId = Object.fromEntries((prods || []).map((p) => [p.id, p]));
@@ -62,6 +69,7 @@ export async function POST(req) {
   if (error?.code === "42703" && method === "online" && !price.discount) ({ data: order, error } = await sb.from("orders").insert(base).select().single()); // migration_2 not run yet
   if (error) return NextResponse.json({ error: error.code === "42703" ? "Store setup is incomplete (run migration_2.sql in Supabase)." : "Could not create your order. Please try again." }, { status: 500 });
 
+  if (needWA) await sb.from("wa_otps").update({ verified_until: null }).eq("phone", cleanPhone(customer.phone));
   // COD with 0% upfront: no online payment at all
   if (price.payNow === 0) {
     const r = await markPaid(order.id, "COD");
