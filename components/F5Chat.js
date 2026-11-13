@@ -6,8 +6,8 @@ import { useShop } from "./ShopProvider";
 import { opt } from "@/lib/img";
 import { inr } from "@/lib/format";
 
-const HELLO = "Namaste! 🙏 Main Rohan hoon, Formula 5 ka AI assistant.\nBatayiye aap kaunsi problem face kar rahe hain? Hindi, Hinglish ya English, jo aapko theek lage.";
-const CHIPS = ["Hair fall / growth", "Skin glow / dark circles", "Acne / face cleansing", "Energy / stamina", "Track my order", "How to order"];
+const HELLO = "Hi, I'm Rohan from Formula 5. What can I help you with?";
+const CHIPS = ["Hair fall", "Skin glow", "Acne", "Energy", "Track order"];
 const KEY = "f5_chat_v1";
 
 // "text [[product:slug]] [[chips: a | b]]" -> clean text + quick replies

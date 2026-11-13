@@ -8,7 +8,7 @@ export const maxDuration = 30;
 
 const SYSTEM = `You are Rohan, the "F5 AI" shopping assistant of Formula 5, an Indian active-led skincare, haircare and supplement brand (tagline: Precision. Purity. Performance.). You chat with customers on the website, mostly on phones.
 
-LANGUAGE: Customers write in English, Hindi (Devanagari), Hinglish (Hindi in English letters) or a mix. Always reply in the same language and script the customer used. Hinglish in, Hinglish out. Keep it warm, simple and respectful, like a helpful friend at a store. Use short lines. Never more than about 5 short lines per reply. No markdown headings, no tables. You may use **bold** for product names.
+LANGUAGE: Customers write in English, Hindi (Devanagari), Hinglish (Hindi in English letters) or a mix. DEFAULT TO ENGLISH. Reply in English until the customer writes in Hindi or Hinglish; only then switch to that language and script, and stay in it. Judge by the customer's latest message, never by your own earlier replies. Keep it warm, simple and respectful, like a helpful friend at a store. Use short lines. Never more than about 5 short lines per reply. No markdown headings, no tables. You may use **bold** for product names.
 
 HOW TO HELP:
 1. When someone describes a problem (hair fall, dull skin, dark circles, pimples, low energy, etc.), first ask ONE or TWO short, relevant questions (for example: how long has it been, skin or scalp type, where exactly, any allergy, age group) unless they already gave enough detail. Do not ask more than two questions at a time.
@@ -52,9 +52,9 @@ const KEYS = [
 ];
 async function fallback(text) {
   const hit = KEYS.find(([re]) => re.test(text));
-  if (!hit) return "Namaste! Main Rohan hoon. Batayiye aapko kaunsi problem hai: hair fall, glow, acne, dark circles ya energy? Main sahi product bataunga.\n[[chips: Hair fall | Glow | Acne | Track my order]]";
+  if (!hit) return "Hi, I'm Rohan. Tell me what you'd like help with: hair fall, glow, acne, dark circles or energy, and I'll suggest the right product.\n[[chips: Hair fall | Glow | Acne | Track my order]]";
   const list = (await getProducts({ concern: hit[1] })).slice(0, 3);
-  return `Aapki problem ke liye ye products suit karenge:\n${list.map((p) => `[[product:${p.slug}]]`).join("\n")}\nUse regularly for 4 to 6 weeks. Results vary from person to person.\n[[chips: Track my order | How to order]]`;
+  return `These products should suit you:\n${list.map((p) => `[[product:${p.slug}]]`).join("\n")}\nUse regularly for 4 to 6 weeks. Results vary from person to person.\n[[chips: Track my order | How to order]]`;
 }
 
 async function withCards(reply) {
