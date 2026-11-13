@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { opt, srcSet } from "@/lib/img";
 import { useState } from "react";
 import { useShop } from "./ShopProvider";
 import Bottle from "./Bottle";
@@ -26,7 +27,7 @@ export default function ProductCard({ p, category, accent, tagMap = {} }) {
   return (
     <article className="f5-card" style={{ "--acc": acc }}>
       <Link className={"f5-pm" + (p.images?.[0] && !bad ? " has-img" : "")} href={`/products/${p.slug}`} aria-label={`${short}, ${inr(pack.price)}`}>
-        {p.images?.[0] && !bad ? <img className="f5-pm-img" src={p.images[0]} alt={short} loading="lazy" decoding="async" onError={() => setBad(true)} /> : <div className="f5-pm-art"><Bottle product={p} /></div>}
+        {p.images?.[0] && !bad ? <img className="f5-pm-img" src={opt(p.images[0], 640)} srcSet={srcSet(p.images[0], [256, 384, 640, 828])} sizes="(max-width:760px) 46vw, (max-width:1100px) 31vw, 23vw" alt={short} loading="lazy" decoding="async" onError={() => setBad(true)} /> : <div className="f5-pm-art"><Bottle product={p} /></div>}
         {tag && <span className="f5-tag">{tag.name}</span>}
         {amount && <span className="f5-chip"><b>{amount}</b> {activeLabel(inci)}</span>}
       </Link>

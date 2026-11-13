@@ -11,7 +11,7 @@ npm run dev                     # http://localhost:3000
 With no Supabase keys the store runs on built-in sample data (`lib/fallback.js`, products from `lib/products.seed.json`).
 
 ## Go live
-1. Supabase SQL Editor: run `schema.sql`, then `migration_2` to `migration_8` in order, then `seed.sql` (26 products, categories, concerns, slides, blocks; reviews are added unapproved).
+1. Supabase SQL Editor: run `schema.sql`, then `migration_2` to `migration_9` in order, then `reset_formula5.sql` (only if old store data is present), then `seed.sql` (26 products, categories, concerns, slides, blocks; reviews are added unapproved).
 2. Set the env vars from `.env.example` (Supabase, Razorpay, Resend, site URL) in Vercel.
 3. Admin at `/admin`: Products (packs, price, stock), Categories, Concerns, Reviews (approve only genuine ones), Slides, Block placement, Settings, Legal pages.
 

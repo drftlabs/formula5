@@ -1,4 +1,5 @@
 "use client";
+import { opt } from "@/lib/img";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { useShop } from "./ShopProvider";
@@ -28,7 +29,7 @@ export default function CartDrawer() {
               <p style={{ fontSize: 12, color: "var(--concrete)", padding: "14px 0 4px", letterSpacing: ".06em" }}>{toFree > 0 ? <>Add <b style={{ color: "var(--chalk)" }}>{inr(toFree)}</b> more for free shipping</> : <b style={{ color: "var(--chalk)" }}>You've unlocked free shipping</b>}</p>
               {items.map((i) => (
                 <div className="li" key={i.id + i.size + (i.color || "")}>
-                  <div className="thumb">{i.image && <img src={i.image} alt={i.name} />}</div>
+                  <div className="thumb">{i.image && <img src={opt(i.image, 128)} alt={i.name} loading="lazy" decoding="async" />}</div>
                   <div><h3><Link href={`/products/${i.slug}`} onClick={() => setDrawer(false)}>{i.name}</Link></h3><small>{/^\d+$/.test(i.size) ? `Pack ${i.size}` : i.size}{i.colorName ? ` · ${i.colorName}` : ""}</small>
                     <div className="qty"><button aria-label="Decrease quantity" onClick={() => setQty(i.id, i.size, i.qty - 1, i.color)}>−</button><span aria-live="polite">{i.qty}</span><button aria-label="Increase quantity" onClick={() => setQty(i.id, i.size, Math.min(10, i.qty + 1), i.color)}>+</button></div></div>
                   <div><div className="pr">{inr(i.price * i.qty)}</div><button className="rm" onClick={() => remove(i.id, i.size, i.color)} aria-label={`Remove ${i.name}`}>Remove</button></div>

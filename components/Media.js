@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { opt, srcSet } from "@/lib/img";
 
 // Image slot: shows the uploaded image (optionally a separate mobile image) or a clean tinted placeholder until one is added in admin.
 export function Media({ src, mobile, alt = "", position = "50% 50%", fit = "cover", priority = false, className = "" }) {
@@ -6,8 +7,8 @@ export function Media({ src, mobile, alt = "", position = "50% 50%", fit = "cove
   return (
     <div className={"media" + (src ? " has-img" : "") + (className ? " " + className : "")} style={{ "--pos": position, "--fit": fit === "contain" ? "contain" : "cover" }}>
       {src && (mobile ? (
-        <picture><source media="(max-width:759px)" srcSet={mobile} /><img src={src} {...img} /></picture>
-      ) : <img src={src} {...img} />)}
+        <picture><source media="(max-width:759px)" srcSet={srcSet(mobile, [384, 640, 828])} sizes="100vw" /><img src={opt(src, 1200)} srcSet={srcSet(src, [640, 1080, 1920])} sizes="100vw" {...img} /></picture>
+      ) : <img src={opt(src, 1200)} srcSet={srcSet(src, [640, 1080, 1920])} sizes="100vw" {...img} />)}
     </div>
   );
 }

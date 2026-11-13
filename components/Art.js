@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
 import Bottle from "./Bottle";
+import { opt, srcSet } from "@/lib/img";
 // Pack shot for one product: the real photo when there is one (falls back to the drawn pack if it can't load).
 export function Shot({ p, scale }) {
   const [bad, setBad] = useState(false);
   const src = p.images?.[0];
   if (!src || bad) return <Bottle product={p} scale={scale} />;
-  return <div className="f5-artimg" style={{ "--sc": scale }}><img src={src} alt="" loading="eager" decoding="async" onError={() => setBad(true)} /></div>;
+  return <div className="f5-artimg" style={{ "--sc": scale }}><img src={opt(src, 640)} srcSet={srcSet(src, [256, 384, 640])} sizes="(max-width:760px) 45vw, 300px" alt="" loading="lazy" decoding="async" onError={() => setBad(true)} /></div>;
 }
 // Arch, podium and floating orbs with the pack(s) standing on it.
 export default function Art({ items = [], className = "" }) {

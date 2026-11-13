@@ -21,6 +21,13 @@ export async function uploadImage(orig, folder = "misc", keepName = false) {
   const ext = (file.name.split(".").pop() || "png").toLowerCase().replace(/[^a-z0-9]/g, "");
   const base = String(orig.name || "").replace(/\.\w+$/, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
   const path = keepName && base ? `${folder}/${base}--${Math.random().toString(36).slice(2, 7)}.${ext}` : `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 7)}.${ext}`;
+  // preferred: Vercel Blob (served through Vercel's image optimizer as WebP). Falls back to Supabase storage if Blob isn't set up.
+  try {
+    const fd = new FormData(); fd.append("file", file); fd.append("folder", folder);
+    const r = await fetch("/api/admin/upload", { method: "POST", body: fd });
+    if (r.ok) return (await r.json()).url;
+    if (r.status !== 501) throw new Error((await r.json().catch(() => ({}))).error || "Upload failed");
+  } catch (x) { if (x.message && x.message !== "Failed to fetch") throw x; }
   const { error } = await browserClient().storage.from("media").upload(path, file, { cacheControl: "31536000", upsert: false, contentType: file.type });
   if (error) throw new Error(error.message);
   return browserClient().storage.from("media").getPublicUrl(path).data.publicUrl;

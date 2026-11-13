@@ -25,7 +25,7 @@ export default function Header({ categories = [] }) {
             <Link href="/products">Shop</Link><Link href="/#categories">Categories</Link><Link href="/#concerns">Concerns</Link><Link href="/ingredients">Hero actives</Link><Link href="/our-story">Our story</Link>
           </nav>
         </div>
-        <Link className="f5-logo" href="/" aria-label="Formula 5, home"><img src="/logo.png" alt="Formula 5" width="816" height="208" /></Link>
+        <Link className="f5-logo" href="/" aria-label="Formula 5, home"><img src="/logo.png" alt="Formula 5" width="908" height="160" /></Link>
         <div className="f5-tools">
           <button className="f5-ib" aria-label="Search" aria-expanded={search} onClick={() => setSearch(!search)}><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" /><path d="m20 20-4.2-4.2" /></svg></button>
           <Link className="f5-ib" href="/account" aria-label="Account: log in or sign up"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.8" /><path d="M4.5 20c.9-4 3.8-6 7.5-6s6.6 2 7.5 6" /></svg></Link>

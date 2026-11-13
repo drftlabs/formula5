@@ -11,7 +11,7 @@ export default function Footer({ settings, categories = [] }) {
       <div className="f5-foot-in">
         <div className="f5-foot-top">
           <div className="f5-foot-brand">
-            <Link className="f5-logo" href="/" aria-label="Formula 5, back to top"><img src="/logo.png" alt="Formula 5" width="816" height="208" /></Link>
+            <Link className="f5-logo" href="/" aria-label="Formula 5, back to top"><img src="/logo.png" alt="Formula 5" width="908" height="160" /></Link>
             <p>Precision.<br />Purity.<br />Performance.</p>
             <a className="f5-ig" href={ig ? `https://instagram.com/${ig}` : "#"} target={ig ? "_blank" : undefined} rel="noopener" aria-label="Formula 5 on Instagram">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none" /></svg><span>{ig ? "@" + ig : "Instagram"}</span>
