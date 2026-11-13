@@ -27,13 +27,13 @@ export default function AbandonedList({ rows }) {
             <td><b>{r.name || "-"}</b><br /><span className="mut">{r.email}{r.phone ? ` · ${r.phone}` : ""}{r.city ? ` · ${r.city}` : ""}</span>
               <div className="bar-actions" style={{ margin: "6px 0 0", gap: 6 }}>
                 {p && <a className="abtn ghost sm" href={`tel:+${p}`}>📞 Call</a>}
-                {p && <a className="abtn ghost sm" href={`https://wa.me/${p}?text=${encodeURIComponent(`Hi ${String(r.name || "").split(" ")[0] || "there"}, you left a pair in your Taeken bag. Need any help completing your order?`)}`} target="_blank" rel="noopener">💬 WhatsApp</a>}
+                {p && <a className="abtn ghost sm" href={`https://wa.me/${p}?text=${encodeURIComponent(`Hi ${String(r.name || "").split(" ")[0] || "there"}, you left something in your Formula 5 bag. Need any help completing your order?`)}`} target="_blank" rel="noopener">💬 WhatsApp</a>}
                 {r.email && <a className="abtn ghost sm" href={`mailto:${r.email}`}>✉ Email</a>}</div></td>
-            <td className="mut" style={{ maxWidth: 260 }}>{(r.items || []).map((i) => `${i.name} (UK ${i.size})×${i.qty}`).join(", ")}</td>
+            <td className="mut" style={{ maxWidth: 260 }}>{(r.items || []).map((i) => `${i.name} (Pack ${i.size})×${i.qty}`).join(", ")}</td>
             <td>{inr(r.total)}</td><td className="mut">{r.stage}</td>
-            <td>{r.recovered ? <span className="pill" style={{ background: "#143222", color: "#7fe0a0" }}>Ordered</span> : r.reminded_at ? <span className="mut">Sent {dateFmt(r.reminded_at)}{r.count > 1 ? ` (×${r.count})` : ""}</span> : <span className="mut">Not sent</span>}</td>
+            <td>{r.recovered ? <span className="pill" style={{ background: "#EAF4EC", color: "#2E7D4F" }}>Ordered</span> : r.reminded_at ? <span className="mut">Sent {dateFmt(r.reminded_at)}{r.count > 1 ? ` (×${r.count})` : ""}</span> : <span className="mut">Not sent</span>}</td>
             <td>{!r.recovered && /\S+@\S+/.test(r.email || "") && <button className="abtn sm ghost" disabled={pending || st === "…"} onClick={() => send(r).then(() => router.refresh())}>{st === "…" ? "Sending…" : r.reminded_at ? "Send again" : "Send reminder"}</button>}
-              {st && st !== "…" && <div style={{ fontSize: 11, marginTop: 4, color: st.err ? "#ff9a9a" : "#7fe0a0" }}>{st.err || st}</div>}</td>
+              {st && st !== "…" && <div style={{ fontSize: 11, marginTop: 4, color: st.err ? "#A33B34" : "#2E7D4F" }}>{st.err || st}</div>}</td>
           </tr>); })}
         {!rows.length && <tr><td colSpan="7" className="mut">Nothing here. Abandoned carts appear once a visitor has entered their email at checkout and left for 30 minutes.</td></tr>}
       </tbody></table></div>

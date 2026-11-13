@@ -15,11 +15,11 @@ export default function AdminNav({ label, perms = [] }) {
   const on = (h) => (h === "/admin" ? path === h : path.startsWith(h));
   return (
     <aside className="adm-side">
-      <div className="brand"><img src="/logo.png" alt="" /><div>TAEKEN<small>ADMIN</small></div></div>
+      <div className="brand"><img src="/logo.png" alt="" /><div>FORMULA 5<small>ADMIN</small></div></div>
       {NAV.map(([g, links]) => { const ok = links.filter((l) => perms.includes(l[2])); return ok.length ? <div key={g}><div className="grp">{g}</div>{ok.map(([h, l]) => <Link key={h} href={h} className={on(h) ? "on" : ""}>{l}</Link>)}</div> : null; })}
       <div className="grp">Account</div>
       <a href="/" target="_blank" rel="noopener">View store ↗</a>
-      <button onClick={async () => { await browserClient().auth.signOut(); router.replace("/admin/login"); router.refresh(); }}>Sign out<br /><span style={{ fontSize: 10, color: "#8a8a8f", fontWeight: 500 }}>{label}</span></button>
+      <button onClick={async () => { await browserClient().auth.signOut(); router.replace("/admin/login"); router.refresh(); }}>Sign out<br /><span style={{ fontSize: 10, color: "#7A7568", fontWeight: 500 }}>{label}</span></button>
     </aside>
   );
 }

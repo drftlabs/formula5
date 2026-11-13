@@ -64,8 +64,8 @@ export default function TeamManager({ roles, staff, meId }) {
       <div className="tblwrap"><table className="tbl"><thead><tr><th>User ID</th><th>Name</th><th>Access</th><th>Status</th><th></th></tr></thead><tbody>
         {staff.map((s) => <tr key={s.user_id}>
           <td><b>{s.username || s.email || "-"}</b>{s.user_id === meId && <span className="mut"> (you)</span>}</td><td>{s.display_name || "-"}</td>
-          <td>{s.is_owner ? <span className="pill" style={{ background: "#3a2f16", color: "#ffd08a" }}>Owner · full access</span> : s.role_id ? <>{roleName(s.role_id) || "Role"}</> : <span className="mut">Custom · {s.permissions.length} tabs</span>}</td>
-          <td>{s.active === false ? <span className="pill" style={{ background: "#3d1b1d", color: "#ff9a9a" }}>Off</span> : <span className="pill" style={{ background: "#143222", color: "#7fe0a0" }}>Active</span>}</td>
+          <td>{s.is_owner ? <span className="pill" style={{ background: "#FBF3DF", color: "#8A6A22" }}>Owner · full access</span> : s.role_id ? <>{roleName(s.role_id) || "Role"}</> : <span className="mut">Custom · {s.permissions.length} tabs</span>}</td>
+          <td>{s.active === false ? <span className="pill" style={{ background: "#FBEDEA", color: "#A33B34" }}>Off</span> : <span className="pill" style={{ background: "#EAF4EC", color: "#2E7D4F" }}>Active</span>}</td>
           <td>{!s.is_owner && <button className="abtn sm ghost" onClick={() => setEdit({ ...s, permissions: s.permissions || [] })}>Manage</button>}</td></tr>)}
       </tbody></table></div>
 

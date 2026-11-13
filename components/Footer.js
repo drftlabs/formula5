@@ -28,7 +28,7 @@ export default function Footer({ settings, categories = [] }) {
           </div>
         </div>
         <div className="f5-foot-bot">
-          <div><div>© {new Date().getFullYear()} {settings.business_name}. All rights reserved.</div>{settings.disclaimer && <div className="disc" style={{ marginTop: 6 }}>{settings.disclaimer}</div>}</div>
+          <div><div>© {new Date().getFullYear()} {settings.business_name}. All rights reserved.</div></div>
           <div><b className="f5-pay">Secure payment</b> · UPI, cards, netbanking · India · INR ₹</div>
         </div>
       </div>

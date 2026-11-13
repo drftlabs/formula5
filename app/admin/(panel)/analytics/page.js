@@ -36,7 +36,7 @@ export default async function Analytics({ searchParams }) {
       <RangeBar r={r} path="/admin/analytics" />
 
       <div className="attn" style={{ alignItems: "stretch" }}>
-        <div style={{ background: "#14231a", border: "1px solid #244a31", padding: "10px 14px", fontSize: 13 }}><span className="livedot" /><b style={{ font: "400 22px var(--display)" }}>{live.size}</b> on the site right now{live.size > 0 && <span className="mut"> · {[...livePages.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([p, n]) => `${shortPath(p)} (${n})`).join(", ")}</span>}</div>
+        <div style={{ background: "#EAF4EC", border: "1px solid #BFDCC8", padding: "10px 14px", fontSize: 13 }}><span className="livedot" /><b style={{ font: "400 22px var(--display)" }}>{live.size}</b> on the site right now{live.size > 0 && <span className="mut"> · {[...livePages.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([p, n]) => `${shortPath(p)} (${n})`).join(", ")}</span>}</div>
       </div>
 
       <div className="kpis">

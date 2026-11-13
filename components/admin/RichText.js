@@ -32,8 +32,8 @@ export default function RichText({ value, onChange, folder = "descriptions" }) {
         <button type="button" className={prev ? "on" : ""} onClick={() => setPrev(!prev)} style={{ marginLeft: "auto" }}>{prev ? "Edit" : "Preview"}</button>
         <input ref={file} type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden onChange={addImgs} />
       </div>
-      {prev ? <div className="rt-prev"><Prose text={value || "Nothing yet."} /></div> : <textarea ref={ta} value={value} onChange={(e) => onChange(e.target.value)} placeholder={"## The build\nTell the story of this pair.\n\n![detail shot](image-url)"} />}
-      {err && <p className="hint" style={{ color: "#ff8a8a" }}>{err}</p>}
+      {prev ? <div className="rt-prev"><Prose text={value || "Nothing yet."} /></div> : <textarea ref={ta} value={value} onChange={(e) => onChange(e.target.value)} placeholder={"## What is inside\nTell the story of this formula.\n\n![detail shot](image-url)"} />}
+      {err && <p className="hint" style={{ color: "#A33B34" }}>{err}</p>}
       <p className="hint">Place the cursor where the image should go, then click Insert image. Photos are shrunk automatically.</p>
     </div>
   );

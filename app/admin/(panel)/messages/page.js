@@ -14,7 +14,7 @@ export default async function Messages({ searchParams }) {
       {(data || []).map((m) => (
         <div className="panel" key={m.id}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
-            <div><span className="pill" style={{ background: m.type === "complaint" ? "#5a2a2a" : "#26262a", marginRight: 8 }}>{m.type}</span><b>{m.subject || m.category || "Message"}</b> <span className="mut">· {dateFmt(m.created_at)}</span></div>
+            <div><span className="pill" style={{ background: m.type === "complaint" ? "#E2B4AE" : "#EDE8DC", marginRight: 8 }}>{m.type}</span><b>{m.subject || m.category || "Message"}</b> <span className="mut">· {dateFmt(m.created_at)}</span></div>
             <MessageStatus id={m.id} status={m.status} />
           </div>
           <p style={{ margin: "10px 0", whiteSpace: "pre-wrap", lineHeight: 1.6 }}>{m.message}</p>

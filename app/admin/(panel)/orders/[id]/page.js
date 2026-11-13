@@ -18,13 +18,13 @@ export default async function OrderPage({ params }) {
   const mine = base.filter((x) => x.id !== o.id && (emailKey(x.email) === e || (p.length === 10 && phoneKey(x.phone) === p)));
   const a = o.shipping_address || {}, cod = o.payment_method === "cod", pay = payInfo(o);
   const events = [["Order placed", o.created_at], o.paid_at && [cod ? "Order confirmed" : "Payment received", o.paid_at], o.shipped_at && ["Shipped", o.shipped_at], o.delivered_at && ["Delivered", o.delivered_at], o.cancelled_at && ["Cancelled", o.cancelled_at]].filter(Boolean);
-  const msg = `Hi ${String(o.name || "").split(" ")[0]}, this is Taeken about your order ${o.order_number}. `;
+  const msg = `Hi ${String(o.name || "").split(" ")[0]}, this is Formula 5 about your order ${o.order_number}. `;
   return (
     <>
       <p className="mut"><Link href="/admin/orders">← Orders</Link></p>
       <h1>{o.order_number} <StageBadge o={o} /> <Pill tone={pay.tone}>{pay.label}</Pill></h1>
       <p className="sub">Placed {dateFmt(o.created_at)}{o.paid_at && <> · {cod ? "Confirmed" : "Paid"} {dateFmt(o.paid_at)}</>} <RepeatBadge r={rep} /></p>
-      {rep?.prev > 0 && <p className="flash" style={{ borderColor: rep.gapH < 24 ? "#ff7a7f" : "#9cc7ff", background: rep.gapH < 24 ? "#2a1618" : "#16212e" }}>⚠ <b>Repeat order.</b> This is the customer&apos;s order #{rep.n}{rep.gapH != null && <> placed {rep.gapH < 1 ? "under an hour" : rep.gapH < 48 ? `${Math.round(rep.gapH)} hours` : `${Math.round(rep.gapH / 24)} days`} after their previous one</>}. {rep.gapH < 24 ? "Check it isn't an accidental duplicate before packing." : "Returning customer."}</p>}
+      {rep?.prev > 0 && <p className="flash" style={{ borderColor: rep.gapH < 24 ? "#B3402F" : "#2F5D93", background: rep.gapH < 24 ? "#FBEDEA" : "#E8F0FA" }}>⚠ <b>Repeat order.</b> This is the customer&apos;s order #{rep.n}{rep.gapH != null && <> placed {rep.gapH < 1 ? "under an hour" : rep.gapH < 48 ? `${Math.round(rep.gapH)} hours` : `${Math.round(rep.gapH / 24)} days`} after their previous one</>}. {rep.gapH < 24 ? "Check it isn't an accidental duplicate before packing." : "Returning customer."}</p>}
 
       <div className="af" style={{ alignItems: "start" }}>
         <div className="panel">
@@ -50,13 +50,13 @@ export default async function OrderPage({ params }) {
         </div>
         <div className="panel">
           <h2 style={{ marginTop: 0 }}>Timeline</h2>
-          {events.map(([l, t]) => <div key={l} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "6px 0", borderBottom: "1px solid #26262a", fontSize: 13 }}><span>{l}</span><span className="mut">{dateFmt(t)}</span></div>)}
+          {events.map(([l, t]) => <div key={l} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "6px 0", borderBottom: "1px solid #EDE8DC", fontSize: 13 }}><span>{l}</span><span className="mut">{dateFmt(t)}</span></div>)}
           {o.tracking_number && <p style={{ marginTop: 10, fontSize: 13 }}>{o.courier || "Courier"}: <b>{o.tracking_number}</b>{o.tracking_url && <> · <a className="link" href={o.tracking_url} target="_blank" rel="noopener">track</a></>}</p>}
           {o.cancel_reason && <p className="mut" style={{ fontSize: 13 }}>Cancel reason: {o.cancel_reason}</p>}
         </div>
       </div>
       <h2>Items</h2>
-      <div className="tblwrap"><table className="tbl"><thead><tr><th></th><th>Product</th><th>UK size</th><th>Qty</th><th>Price</th></tr></thead><tbody>
+      <div className="tblwrap"><table className="tbl"><thead><tr><th></th><th>Product</th><th>Pack</th><th>Qty</th><th>Price</th></tr></thead><tbody>
         {o.items.map((i, k) => <tr key={k}><td><div className="thumbs-adm">{i.image && <img src={i.image} alt="" />}</div></td><td>{i.name}{i.color && <span className="mut"> · {i.color}</span>}</td><td>{i.size}</td><td>{i.qty}</td><td>{inr(i.price * i.qty)}</td></tr>)}
       </tbody></table></div>
       <OrderControls order={o} canDelete={!!ctx?.perms.includes("orders_delete")} />

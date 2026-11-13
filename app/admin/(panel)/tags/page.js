@@ -10,5 +10,5 @@ const fields = [
 export default async function Page() {
   const { data } = await serviceClient().from("tags").select("*").order("sort_order");
   return <><h1>Tags</h1><p className="sub">Create labels like “New Drop” or “Bestseller”, choose their colours, then tick them on each product. They appear on product cards and product pages.</p>
-    <ResourceManager table="tags" rows={data || []} fields={fields} preview="tag" blank={{ name: "", bg: "#D7262B", fg: "#FFFFFF" }} /></>;
+    <ResourceManager table="tags" rows={data || []} fields={fields} preview="tag" blank={{ name: "", bg: "#A8812F", fg: "#FFFFFF" }} /></>;
 }

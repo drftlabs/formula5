@@ -31,7 +31,7 @@ function Editor({ table, row, fields, sortable, preview, titleKey, isNew, onSave
   );
   return (
     <details className={"row-card" + (off ? " off" : "")} open={isNew ? undefined : undefined}>
-      <summary><Preview kind={preview} row={r} /><b>{isNew ? "+ Add new" : r[titleKey] || r.title || "Untitled"}</b>{!isNew && r.type && <span className="pill" style={{ background: "#26262a" }}>{r.type}</span>}{off && <span className="mut">hidden</span>}</summary>
+      <summary><Preview kind={preview} row={r} /><b>{isNew ? "+ Add new" : r[titleKey] || r.title || "Untitled"}</b>{!isNew && r.type && <span className="pill" style={{ background: "#EDE8DC" }}>{r.type}</span>}{off && <span className="mut">hidden</span>}</summary>
       {body}
     </details>
   );

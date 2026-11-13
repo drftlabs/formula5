@@ -22,7 +22,8 @@ export default function CheckoutForm({ modal = false, onClose }) {
   const { items, subtotal, shipping: cfg, clear, setQty, remove, email: loginEmail, ready } = useShop();
   const router = useRouter();
   const [f, setF] = useState(EMPTY), [areas, setAreas] = useState([]), [pinMsg, setPinMsg] = useState("");
-  const [method, setMethod] = useState("online"), [code, setCode] = useState(""), [rule, setRule] = useState(null), [codeMsg, setCodeMsg] = useState(null);
+  const ONLINE = !!process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID; // online payments appear once Razorpay keys are added
+  const [method, setMethod] = useState(ONLINE ? "online" : "cod"), [code, setCode] = useState(""), [rule, setRule] = useState(null), [codeMsg, setCodeMsg] = useState(null);
   const [busy, setBusy] = useState(false), [err, setErr] = useState("");
   const lastPin = useRef(""), [eta, setEta] = useState("");
   useEffect(() => { setEta(etaRange(cfg.etaMin || 3, cfg.etaMax || 4)); }, [cfg.etaMin, cfg.etaMax]);
@@ -69,7 +70,7 @@ export default function CheckoutForm({ modal = false, onClose }) {
     return () => clearTimeout(t);
   }, [ready, items, f.email, f.name, f.phone, f.pin]); // eslint-disable-line
 
-  if (ready && !items.length) return <div className="center"><h1 className="page-title">Your bag is <em>empty</em></h1><p className="lead">Pick a pair first.</p><Link className="btn" href="/collections/all" onClick={onClose}>Shop the collection <Arrow /></Link></div>;
+  if (ready && !items.length) return <div className="center"><h1 className="page-title">Your bag is <em>empty</em></h1><p className="lead">Add something you like first.</p><Link className="btn" href="/products" onClick={onClose}>Shop all products <Arrow /></Link></div>;
 
   async function pay(e) {
     e.preventDefault(); setErr("");
@@ -136,7 +137,7 @@ export default function CheckoutForm({ modal = false, onClose }) {
             <h2><i>03</i>Order summary</h2>
             {eta && <p className="co-eta"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7" /><circle cx="7" cy="17" r="1.6" /><circle cx="17" cy="17" r="1.6" /></svg><span>Estimated delivery: <b>{eta}</b></span></p>}
             <div className="co-sum">
-              {items.map((i) => <div className="li" key={i.id + i.size + (i.color || "")}><div className="thumb">{i.image && <img src={i.image} alt={i.name} />}</div><div><h3>{i.name}</h3><small>UK {i.size}{i.colorName ? ` · ${i.colorName}` : ""}</small>
+              {items.map((i) => <div className="li" key={i.id + i.size + (i.color || "")}><div className="thumb">{i.image && <img src={i.image} alt={i.name} />}</div><div><h3>{i.name}</h3><small>Pack {i.size}{i.colorName ? ` · ${i.colorName}` : ""}</small>
                 <div className="co-qty"><button type="button" aria-label="Decrease quantity" onClick={() => setQty(i.id, i.size, i.qty - 1, i.color)}>−</button><span>{i.qty}</span><button type="button" aria-label="Increase quantity" onClick={() => setQty(i.id, i.size, Math.min(10, i.qty + 1), i.color)}>+</button><button type="button" className="co-rm" onClick={() => remove(i.id, i.size, i.color)}>Remove</button></div></div><div className="pr">{inr(i.price * i.qty)}</div></div>)}
               <div className="code-row">{rule ? <div className="code-ok"><b>{rule.code}</b> applied <button type="button" onClick={() => { setRule(null); setCode(""); setCodeMsg(null); }}>Remove</button></div> : <><input aria-label="Discount code" placeholder="Discount code" value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), applyCode())} /><button type="button" onClick={applyCode}>Apply</button></>}</div>
               {codeMsg && <p className={"hint" + (codeMsg.ok ? " ok" : " bad")}>{codeMsg.t}</p>}
@@ -152,13 +153,13 @@ export default function CheckoutForm({ modal = false, onClose }) {
           <section className="co-step reveal">
             <h2><i>04</i>Payment</h2>
             <div className="pay-opts" role="radiogroup" aria-label="Payment method">
-              <label className={"pay-opt" + (method === "online" ? " on" : "")}>
+              {ONLINE && <label className={"pay-opt" + (method === "online" ? " on" : "")}>
                 <span className={"pay-chip" + (online.shipping === 0 ? " free" : "")}>{online.shipping === 0 ? "Free shipping" : cfg.min > 0 ? `Free shipping above ${inr(cfg.min)}` : `Shipping ${inr(online.shipping)}`}</span>
                 <input type="radio" name="m" checked={method === "online"} onChange={() => setMethod("online")} />
                 <span className="dot" />
                 <span className="pt"><b>Pay online</b><small>UPI · Cards · Netbanking · Wallets · EMI. Opens the secure Razorpay window.</small></span>
                 <span className="pa">{inr(online.total)}</span>
-              </label>
+              </label>}
               {cfg.codEnabled && (
                 <label className={"pay-opt" + (method === "cod" ? " on" : "")}>
                   <span className="pay-chip cod">{inr(cfg.codFee)} COD shipping extra</span>
@@ -175,8 +176,8 @@ export default function CheckoutForm({ modal = false, onClose }) {
 
           {err && <p className="msg-err" role="alert">{err}</p>}
           <button className="btn co-pay" type="submit" disabled={busy}>{busy ? (method === "cod" ? "Confirming your order…" : "Opening payment…") : method === "cod" ? (price.payNow ? <>Pay {inr(price.payNow)} now &amp; confirm COD <Arrow /></> : <>Confirm order <Arrow /></>) : <>Pay {inr(price.total)} <Arrow /></>}</button>
-          <div className="secure-row"><span>🔒 Secure payment by Razorpay</span><span>↺ {cfg.returnDays}-day returns &amp; exchange</span><span>✓ Your card details never touch our server</span></div>
-          <p className="secure">By ordering you agree to our <Link className="link" href="/policies/terms" style={{ fontSize: 12 }} onClick={onClose}>Terms</Link> and <Link className="link" href="/policies/returns" style={{ fontSize: 12 }} onClick={onClose}>Return Policy</Link>.</p>
+          <div className="secure-row"><span>🔒 Secure payment by Razorpay</span><span>✓ Your card details never touch our server</span></div>
+          <p className="secure">By ordering you agree to our <Link className="link" href="/policies/terms" style={{ fontSize: 12 }} onClick={onClose}>Terms</Link>.</p>
         </>
       )}
       {!addrOk && err && <p className="msg-err" role="alert">{err}</p>}

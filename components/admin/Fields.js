@@ -45,7 +45,7 @@ export function ImageField({ value, onChange, folder, hint }) {
           <input ref={ref} type="file" accept="image/png,image/jpeg,image/webp,image/avif" hidden onChange={pick} />
         </div>
       </div>
-      {hint && <p className="hint">{hint}</p>}{err && <p className="hint" style={{ color: "#ff8a8a" }}>{err}</p>}
+      {hint && <p className="hint">{hint}</p>}{err && <p className="hint" style={{ color: "#A33B34" }}>{err}</p>}
     </div>
   );
 }

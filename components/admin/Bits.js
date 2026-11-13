@@ -4,7 +4,7 @@ import { inr, STATUS } from "@/lib/format";
 import { payInfo, stageLabel, STAGE_TONE, phoneIntl } from "@/lib/orderMeta";
 import { PRESETS, delta, rangeLabel, fmtDur } from "@/lib/stats";
 
-export const TONE = { ok: ["#143222", "#7fe0a0"], warn: ["#3a2f16", "#ffd08a"], bad: ["#3d1b1d", "#ff9a9a"], cod: ["#3a2f16", "#ffd08a"], info: ["#1a2a3d", "#9cc7ff"], new: ["#2a2a2f", "#f1efe9"], mut: ["#26262a", "#9a9aa0"] };
+export const TONE = { ok: ["#EAF4EC", "#2E7D4F"], warn: ["#FBF3DF", "#8A6A22"], bad: ["#FBEDEA", "#A33B34"], cod: ["#FBF3DF", "#8A6A22"], info: ["#E8F0FA", "#2F5D93"], new: ["#EDE8DC", "#1B1A17"], mut: ["#EDE8DC", "#7A7568"] };
 export const Pill = ({ tone = "new", children, title }) => <span className="pill" title={title} style={{ background: TONE[tone][0], color: TONE[tone][1] }}>{children}</span>;
 
 export function PayBadge({ o }) {
@@ -23,7 +23,7 @@ export function RepeatBadge({ r }) {
 
 /** Call / WhatsApp / Email buttons. */
 export function ContactBtns({ phone, email, name, msg, size = "sm" }) {
-  const p = phoneIntl(phone), text = msg || `Hi ${String(name || "").split(" ")[0] || "there"}, this is Taeken. `;
+  const p = phoneIntl(phone), text = msg || `Hi ${String(name || "").split(" ")[0] || "there"}, this is Formula 5. `;
   return (
     <span className="bar-actions" style={{ margin: 0, gap: 6 }}>
       {p && <a className={"abtn ghost " + size} href={`tel:+${p}`}>📞 Call</a>}
@@ -62,7 +62,7 @@ export function RangeBar({ r, path, extra = {} }) {
         <label>to<input type="date" name="cto" defaultValue={r.cmp?.to || ""} /></label>
         <button className="abtn sm">Apply</button>
       </div>
-      <p className="mut" style={{ fontSize: 12, margin: "8px 0 0" }}>Showing <b style={{ color: "#f1efe9" }}>{rangeLabel(r)}</b>{r.cmp && <> · compared with {rangeLabel(r.cmp)}</>} · Indian time</p>
+      <p className="mut" style={{ fontSize: 12, margin: "8px 0 0" }}>Showing <b style={{ color: "#1B1A17" }}>{rangeLabel(r)}</b>{r.cmp && <> · compared with {rangeLabel(r.cmp)}</>} · Indian time</p>
     </form>
   );
 }
@@ -78,13 +78,13 @@ export function SalesChart({ data, cmp, h = 240 }) {
   const line = cmp?.length ? cmp.slice(0, n).map((d, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(d.sales).toFixed(1)}`).join("") : "";
   return (
     <svg viewBox={`0 0 ${W} ${h}`} className="chart" role="img" aria-label="Sales chart">
-      {ticks.map((t) => <g key={t}><line x1={pl} x2={W - pr} y1={y(t)} y2={y(t)} stroke="#2a2a2e" /><text x={pl - 8} y={y(t) + 4} textAnchor="end" className="ax">₹{short(Math.round(t))}</text></g>)}
+      {ticks.map((t) => <g key={t}><line x1={pl} x2={W - pr} y1={y(t)} y2={y(t)} stroke="#EDE8DC" /><text x={pl - 8} y={y(t) + 4} textAnchor="end" className="ax">₹{short(Math.round(t))}</text></g>)}
       {data.map((d, i) => <g key={d.key}>
-        <rect x={x(i) - Math.min(bw * 0.7, 40) / 2} y={y(d.sales)} width={Math.min(bw * 0.7, 40)} height={Math.max(0, pt + ih - y(d.sales))} fill="#d7262b" opacity="0.92"><title>{`${d.label}: ${inr(d.sales)} · ${d.orders} order${d.orders === 1 ? "" : "s"}${cmp?.[i] ? `\nCompared: ${cmp[i].label} ${inr(cmp[i].sales)}` : ""}`}</title></rect>
+        <rect x={x(i) - Math.min(bw * 0.7, 40) / 2} y={y(d.sales)} width={Math.min(bw * 0.7, 40)} height={Math.max(0, pt + ih - y(d.sales))} fill="#A8812F" opacity="0.92"><title>{`${d.label}: ${inr(d.sales)} · ${d.orders} order${d.orders === 1 ? "" : "s"}${cmp?.[i] ? `\nCompared: ${cmp[i].label} ${inr(cmp[i].sales)}` : ""}`}</title></rect>
         {i % step === 0 && <text x={x(i)} y={h - 8} textAnchor="middle" className="ax">{d.label}</text>}
       </g>)}
-      {line && <path d={line} fill="none" stroke="#9a9aa0" strokeWidth="2" strokeDasharray="5 4" />}
-      {cmp?.slice(0, n).map((d, i) => <circle key={i} cx={x(i)} cy={y(d.sales)} r="3" fill="#9a9aa0"><title>{`${d.label}: ${inr(d.sales)}`}</title></circle>)}
+      {line && <path d={line} fill="none" stroke="#7A7568" strokeWidth="2" strokeDasharray="5 4" />}
+      {cmp?.slice(0, n).map((d, i) => <circle key={i} cx={x(i)} cy={y(d.sales)} r="3" fill="#7A7568"><title>{`${d.label}: ${inr(d.sales)}`}</title></circle>)}
     </svg>
   );
 }

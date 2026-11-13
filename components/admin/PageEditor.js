@@ -7,7 +7,7 @@ export default function PageEditor({ slug, title, body, customised, defaultTitle
   const [t, setT] = useState(title), [b, setB] = useState(body), [msg, setMsg] = useState(null), [pending, start] = useTransition(), router = useRouter();
   return (
     <details className="row-card">
-      <summary><b>{defaultTitle}</b>{customised && <span className="pill" style={{ background: "#26262a" }}>edited</span>}<span className="mut">/policies/{slug}</span></summary>
+      <summary><b>{defaultTitle}</b>{customised && <span className="pill" style={{ background: "#EDE8DC" }}>edited</span>}<span className="mut">/policies/{slug}</span></summary>
       <div className="body"><div className="af" style={{ paddingTop: 14 }}>
         <div className="full"><label>Page title</label><input className="in" value={t} onChange={(e) => setT(e.target.value)} /></div>
         <div className="full"><label>Content</label><textarea className="in" style={{ minHeight: 360, fontFamily: "monospace", fontSize: 12, lineHeight: 1.6 }} value={b} onChange={(e) => setB(e.target.value)} /><p className="hint">Use “## Heading” for headings, “- ” for bullets, **bold**. Tokens like {"{{email}}"} fill from Settings.</p></div>
