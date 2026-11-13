@@ -29,7 +29,7 @@ export async function POST(req) {
   if (method === "online" && (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET)) return NextResponse.json({ error: "Online payments are not configured yet." }, { status: 503 });
 
   // Cash on delivery with nothing paid upfront must be confirmed on WhatsApp first (when that is switched on)
-  const needWA = waEnabled() && method === "cod" && !(cfg.codPct > 0);
+  const needWA = waEnabled() && method === "cod" && !(cfg.codPct > 0 || cfg.codFlat > 0);
   if (needWA) {
     const { data: o } = await sb.from("wa_otps").select("verified_until").eq("phone", cleanPhone(customer.phone)).maybeSingle();
     if (!o?.verified_until || new Date(o.verified_until) < new Date()) return NextResponse.json({ error: "Please confirm your number on WhatsApp first." }, { status: 403 });

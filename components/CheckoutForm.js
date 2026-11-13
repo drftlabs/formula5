@@ -78,7 +78,7 @@ export default function CheckoutForm({ modal = false, onClose }) {
   if (ready && !items.length) return <div className="center"><h1 className="page-title">Your bag is <em>empty</em></h1><p className="lead">Add something you like first.</p><Link className="btn" href="/products" onClick={onClose}>Shop all products <Arrow /></Link></div>;
 
   const digits = (v) => String(v || "").replace(/\D/g, "").slice(-10);
-  const needWA = WA_ON && method === "cod" && !(Number(cfg.codPct) > 0);
+  const needWA = WA_ON && method === "cod" && !(Number(cfg.codPct) > 0 || Number(cfg.codFlat) > 0);
   async function sendWA() {
     setWa((x) => ({ ...x, open: true, msg: "", code: "", wait: 30, phone: digits(f.phone) }));
     const r = await fetch("/api/whatsapp/send", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ phone: digits(f.phone) }) }).then((x) => x.json()).catch(() => ({ error: "Couldn't send the code. Check your connection." }));
@@ -108,7 +108,7 @@ export default function CheckoutForm({ modal = false, onClose }) {
       if (d.cod) return done(d.orderNumber, d.due, d.total);
       await loadRzp();
       const rz = new window.Razorpay({
-        key: d.key, amount: d.amount, currency: "INR", name: "Formula 5", description: d.method === "cod" ? `Order ${d.orderNumber}: ${cfg.codPct}% advance (COD)` : `Order ${d.orderNumber}`, order_id: d.rzpOrderId,
+        key: d.key, amount: d.amount, currency: "INR", name: "Formula 5", description: d.method === "cod" ? `Order ${d.orderNumber}: ${cfg.codFlat > 0 ? inr(cfg.codFlat) : cfg.codPct + "%"} advance (COD)` : `Order ${d.orderNumber}`, order_id: d.rzpOrderId,
         prefill: { name: d.prefill.name, email: d.prefill.email, contact: d.prefill.phone }, theme: { color: "#A8812F" },
         modal: { ondismiss: () => { setBusy(false); setErr("Payment was not completed. Your bag is saved, so you can try again."); } },
         handler: async (resp) => {
@@ -184,8 +184,8 @@ export default function CheckoutForm({ modal = false, onClose }) {
                   <span className="pay-chip cod">{inr(cfg.codFee)} COD shipping extra</span>
                   <input type="radio" name="m" checked={method === "cod"} onChange={() => setMethod("cod")} />
                   <span className="dot" />
-                  <span className="pt"><b>Cash on delivery</b>{cfg.codPct > 0
-                    ? <small>Pay <b>{cfg.codPct}%</b> now ({inr(cod.payNow)}) to confirm your order, and the rest ({inr(cod.due)}) in cash when it arrives. A <b>{inr(cfg.codFee)} COD delivery fee</b> is added.</small>
+                  <span className="pt"><b>Cash on delivery</b>{(cfg.codPct > 0 || cfg.codFlat > 0)
+                    ? <small>Pay <b>{inr(cod.payNow)}</b> now to confirm your order. The rest, <b>{inr(cod.due)}</b> (includes the {inr(cfg.codFee)} COD delivery fee), is paid in cash on delivery.</small>
                     : <small>Pay in cash when it arrives. A <b>{inr(cfg.codFee)} COD delivery fee</b> is added.</small>}</span>
                   <span className="pa">{inr(cod.total)}</span>
                 </label>
