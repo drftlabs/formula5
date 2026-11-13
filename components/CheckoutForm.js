@@ -195,9 +195,11 @@ export default function CheckoutForm({ modal = false, onClose }) {
 
           {err && <p className="msg-err" role="alert">{err}</p>}
           {wa.open && (
-            <div className="wa-box" role="group" aria-label="Confirm your number on WhatsApp">
+            <div className="wa-ov" onClick={(e) => { if (e.target === e.currentTarget) setWa((x) => ({ ...x, open: false })); }}>
+            <div className="wa-box" role="dialog" aria-modal="true" aria-label="Confirm your number on WhatsApp">
+              <button type="button" className="wa-x" aria-label="Close" onClick={() => setWa((x) => ({ ...x, open: false }))}>×</button>
               <b>Confirm your number on WhatsApp</b>
-              <p>We sent a 4-digit code to <span>+91 {digits(f.phone).replace(/(\d{2})\d{5}(\d{3})/, "$1•••••$2")}</span> on WhatsApp.</p>
+              <p>{wa.msg && wa.wait === 0 && !wa.code && !wa.checking && /isn't|Couldn't|Setup|wait|valid|backend/i.test(wa.msg) ? "We couldn't send the code to" : "We sent a 4-digit code to"} <span>+91 {digits(f.phone).replace(/(\d{2})\d{5}(\d{3})/, "$1•••••$2")}</span> on WhatsApp.</p>
               <input className="wa-code" inputMode="numeric" autoComplete="one-time-code" maxLength={4} autoFocus placeholder="• • • •" aria-label="4-digit code" value={wa.code} disabled={wa.checking}
                 onChange={(e) => { const v = e.target.value.replace(/\D/g, "").slice(0, 4); setWa((x) => ({ ...x, code: v, msg: "" })); if (v.length === 4) checkWA(v); }} />
               {wa.checking && <small>Checking…</small>}
@@ -206,6 +208,7 @@ export default function CheckoutForm({ modal = false, onClose }) {
                 <button type="button" onClick={() => { setWa((x) => ({ ...x, open: false })); setTimeout(() => document.getElementById("phone")?.focus(), 50); }}>Edit number</button>
                 <button type="button" disabled={wa.wait > 0} onClick={sendWA}>{wa.wait > 0 ? `Resend code in ${wa.wait}s` : "Resend code"}</button>
               </div>
+            </div>
             </div>
           )}
           <button className="btn co-pay" type="submit" disabled={busy || wa.open}>{busy ? (method === "cod" ? "Confirming your order…" : "Opening payment…") : method === "cod" ? (price.payNow ? <>Pay {inr(price.payNow)} now &amp; confirm COD <Arrow /></> : needWA ? <>Confirm on WhatsApp <Arrow /></> : <>Confirm order <Arrow /></>) : <>Pay {inr(price.total)} <Arrow /></>}</button>

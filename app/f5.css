@@ -802,7 +802,9 @@ body:has(.pd-float){padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .pay-opt.off{opacity:.6;cursor:not-allowed}
 .co-pay{border-radius:var(--r)}
 /* WhatsApp confirmation box */
-.wa-box{display:grid;gap:8px;padding:16px;border:var(--bw) solid #2F8A4E;border-radius:var(--r);background:#F1F8F3;color:var(--ink)}
+.wa-ov{position:fixed;inset:0;z-index:300;background:rgba(27,26,23,.55);display:grid;place-items:center;padding:16px}
+.wa-box{position:relative;display:grid;gap:10px;width:100%;max-width:340px;padding:22px 18px 18px;border:var(--bw) solid #2F8A4E;border-radius:12px;background:#fff;color:var(--ink);box-shadow:0 20px 60px rgba(27,26,23,.3)}
+.wa-x{position:absolute;right:8px;top:6px;width:32px;height:32px;font-size:24px;line-height:1;color:var(--mute)}
 .wa-box b{font:700 14px/1.2 var(--font)}.wa-box p{margin:0;font-size:13px;color:var(--mute)}.wa-box p span{color:var(--ink);font-weight:600}
 .wa-code{height:54px;border:var(--bw) solid var(--line2);border-radius:var(--r);background:#fff;text-align:center;font:600 26px/1 var(--font);letter-spacing:.7em;padding-left:.7em;color:var(--ink);max-width:220px;width:100%}
 .wa-code:focus{outline:0;border-color:#2F8A4E}
