@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { pics } from "@/lib/img";
 import { knowledge } from "@/lib/chatKnowledge";
 import { serviceClient } from "@/lib/supabase/server";
 import { getProducts, packsOf } from "@/lib/data";
@@ -61,7 +62,7 @@ async function withCards(reply) {
   const slugs = [...new Set([...reply.matchAll(/\[\[product:([^\]]+)\]\]/g)].map((m) => m[1].trim()))].slice(0, 3);
   if (!slugs.length) return { reply, cards: [] };
   const all = await getProducts();
-  const cards = slugs.map((sl) => all.find((p) => p.slug === sl)).filter(Boolean).map((p) => { const k = packsOf(p)[0]; return { slug: p.slug, name: p.name, price: k.price, mrp: k.mrp || null, image: p.images?.[0] || "" }; });
+  const cards = slugs.map((sl) => all.find((p) => p.slug === sl)).filter(Boolean).map((p) => { const k = packsOf(p)[0]; return { slug: p.slug, name: p.name, price: k.price, mrp: k.mrp || null, image: pics(p.images)[0] || "" }; });
   return { reply, cards };
 }
 

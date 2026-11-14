@@ -10,7 +10,7 @@ import Reveal from "@/components/Reveal";
 import PixelEvent from "@/components/PixelEvent";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import { shippingCfg } from "@/lib/pricing";
-import { opt, srcSet } from "@/lib/img";
+import { opt, srcSet, pics } from "@/lib/img";
 import { inr, SITE_URL, splitName, activeLabel } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +19,7 @@ const ok = (s) => s && !/to be confirmed/i.test(s);
 export async function generateMetadata({ params }) {
   const p = await getProductBySlug(params.slug);
   if (!p) return { title: "Not found" };
-  return { title: p.seo_title || p.name, description: p.seo_description || p.description || p.usp, openGraph: p.images?.[0] ? { images: [p.images[0]] } : undefined };
+  return { title: p.seo_title || p.name, description: p.seo_description || p.description || p.usp, openGraph: pics(p.images)[0] ? { images: [pics(p.images)[0]] } : undefined };
 }
 
 export default async function ProductPage({ params }) {
@@ -35,7 +35,7 @@ export default async function ProductPage({ params }) {
   if (related.length < 4) { const more = await getProducts({ excludeId: p.id }); related = [...related, ...more.filter((m) => !related.some((r) => r.id === m.id))].slice(0, 8); }
   const acc = p.accent || cat?.accent || "#B7B7AE";
   const ingredients = ok(p.ingredients_raw) ? p.ingredients_raw : amount ? `${amount} ${inci}` : "";
-  const ld = { "@context": "https://schema.org", "@type": "Product", name: p.name, image: p.images, description: p.description || p.usp, brand: { "@type": "Brand", name: "Formula 5" }, offers: { "@type": "Offer", priceCurrency: "INR", price: packs[0].price, availability: sold ? "https://schema.org/OutOfStock" : "https://schema.org/InStock", url: `${SITE_URL}/products/${p.slug}` } };
+  const ld = { "@context": "https://schema.org", "@type": "Product", name: p.name, image: pics(p.images), description: p.description || p.usp, brand: { "@type": "Brand", name: "Formula 5" }, offers: { "@type": "Offer", priceCurrency: "INR", price: packs[0].price, availability: sold ? "https://schema.org/OutOfStock" : "https://schema.org/InStock", url: `${SITE_URL}/products/${p.slug}` } };
   const tagline = p.tagline || p.usp;
   const extra = (Array.isArray(p.extra_images) ? p.extra_images : []).filter(Boolean);
   const notes = (p.ingredient_notes || []).filter(Boolean).map((n) => String(n).split(":")[0].trim());

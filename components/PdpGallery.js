@@ -2,10 +2,19 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import Art from "./Art";
 import Bottle from "./Bottle";
+import { isVideo } from "@/lib/img";
 
 // Product image slider. Auto-advances until someone touches it. Pinch-to-zoom works on the image only (page zoom is off).
 // A zoom button opens a full-screen viewer. Built for JPEGs that carry their own background; placeholders stand in until photos exist.
-const Slide = ({ s, product, sub, k, big }) => s.src
+// A video slide plays by itself, muted and looping, with no controls. It only runs while it is the visible slide.
+function Clip({ src, active }) {
+  const v = useRef();
+  useEffect(() => { const el = v.current; if (!el) return; if (active) { el.muted = true; const p = el.play(); p && p.catch(() => {}); } else el.pause(); }, [active]);
+  return <video ref={v} src={src} muted loop autoPlay playsInline preload="auto" disablePictureInPicture disableRemotePlayback controlsList="nodownload nofullscreen noremoteplayback" tabIndex={-1} aria-hidden="true" onContextMenu={(e) => e.preventDefault()} />;
+}
+const Slide = ({ s, product, sub, k, big, active }) => s.src && isVideo(s.src)
+  ? <Clip src={s.src} active={active} />
+  : s.src
   ? <img onError={(e) => { e.currentTarget.style.visibility = "hidden"; }} src={s.src} alt={`${product.name}, view ${k + 1}`} loading={k && !big ? "lazy" : "eager"} decoding="async" draggable="false" />
   : s.art === "arch" ? <Art items={[product]} />
   : s.art === "pack" ? <div className="pg-ph pg-ph2"><Bottle product={product} scale={1.25} /></div>
@@ -23,10 +32,10 @@ export default function PdpGallery({ images = [], product }) {
 
   // auto-slide: every 4s, loops. A touch, swipe, zoom or click pauses it; it picks up again by itself a few seconds after the visitor stops.
   useEffect(() => {
-    if (n < 2 || hover || box || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (n < 2 || hover || box || isVideo(slides[i]?.src) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const t = setInterval(() => { if (!document.hidden && z.current.s <= 1 && Date.now() - last.current > 3500) go(i + 1); }, 4000);
     return () => clearInterval(t);
-  }, [i, n, hover, box]); // eslint-disable-line
+  }, [i, n, hover, box]); // eslint-disable-line  (a video slide holds the slider still; swipe to move on)
 
   // pinch to zoom, on the image only
   useEffect(() => {
@@ -66,7 +75,7 @@ export default function PdpGallery({ images = [], product }) {
     <div className="pg" role="region" aria-roledescription="carousel" aria-label="Product images" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       <div className="pg-main">
         <div className={"pg-track" + (zoomed ? " zoomed" : "")} ref={ref} onScroll={upd} tabIndex={0} onKeyDown={key} onPointerDown={() => { touch(); }}>
-          {slides.map((s, k) => <div className="pg-slide" key={k} role="group" aria-roledescription="slide" aria-label={`${k + 1} of ${n}`}><Slide s={s} product={product} sub={sub} k={k} /></div>)}
+          {slides.map((s, k) => <div className="pg-slide" key={k} role="group" aria-roledescription="slide" aria-label={`${k + 1} of ${n}`}><Slide s={s} product={product} sub={sub} k={k} active={k === i} /></div>)}
         </div>
         <button className="pg-zoom" aria-label="Open photos full screen" onClick={() => { touch(); setBox(true); }}><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" /><path d="M20 20l-4.2-4.2M11 8v6M8 11h6" /></svg></button>
         {n > 1 && <>
@@ -78,7 +87,7 @@ export default function PdpGallery({ images = [], product }) {
       {box && (
         <div className="pg-lb" role="dialog" aria-modal="true" aria-label="Product photos" onClick={(e) => e.target === e.currentTarget && setBox(false)}>
           <button className="pg-x" aria-label="Close" onClick={() => setBox(false)}><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
-          <div className="pg-lb-stage"><div className="pg-lb-slide"><Slide s={slides[i]} product={product} sub={sub} k={i} big /></div></div>
+          <div className="pg-lb-stage"><div className="pg-lb-slide"><Slide s={slides[i]} product={product} sub={sub} k={i} big active /></div></div>
           {n > 1 && <>
             <button className="pg-arr l show" aria-label="Previous image" onClick={() => setI((i - 1 + n) % n)}><svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6" /></svg></button>
             <button className="pg-arr r show" aria-label="Next image" onClick={() => setI((i + 1) % n)}><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></button>

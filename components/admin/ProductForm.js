@@ -2,7 +2,8 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { saveProduct, deleteProduct, duplicateProduct, saveRow } from "@/lib/actions/admin";
-import { Field, uploadImage } from "./Fields";
+import { Field, uploadImage, uploadVideo } from "./Fields";
+import { isVideo } from "@/lib/img";
 import RichText from "./RichText";
 import { slugify, inr } from "@/lib/format";
 
@@ -18,6 +19,11 @@ export default function ProductForm({ product, collections, tags, sizeKeys, cate
   async function addImages(e) {
     setUp(true); setMsg(null);
     try { const urls = []; for (const f of e.target.files) urls.push(await uploadImage(f, "products")); setP((x) => ({ ...x, images: [...x.images, ...urls] })); } catch (x) { setMsg({ err: x.message }); }
+    setUp(false); e.target.value = "";
+  }
+  async function addVideo(e) {
+    setUp(true); setMsg(null);
+    try { const urls = []; for (const f of e.target.files) urls.push(await uploadVideo(f, "products")); setP((x) => ({ ...x, images: [...x.images, ...urls] })); } catch (x) { setMsg({ err: x.message }); }
     setUp(false); e.target.value = "";
   }
   async function addExtra(e) {
@@ -50,10 +56,11 @@ export default function ProductForm({ product, collections, tags, sizeKeys, cate
       </div>
 
       <div className="panel"><h2 style={{ marginTop: 0 }}>Images</h2>
-        <p className="hint mut" style={{ marginBottom: 12, fontSize: 12 }}>First image is the main one: square product shot on a clean background, same angle across products. Big files are shrunk to 1600px WebP automatically.</p>
+        <p className="hint mut" style={{ marginBottom: 12, fontSize: 12 }}>First image is the main one: square product shot on a clean background, same angle across products. Big files are shrunk to 1600px WebP automatically. Video: add with “+ Video” (MP4/WebM, up to 30 MB, keep it 5–10 s). It plays on its own, muted and looping, with no controls; put it anywhere in the order, but not first if you want a photo on cards and share previews.</p>
         <div className="gallery-adm">
-          {p.images.map((src, i) => <div className="g" key={src + i}><img src={src} alt="" />{i === 0 && <em>MAIN</em>}<button className="x" onClick={() => setP((x) => ({ ...x, images: x.images.filter((_, k) => k !== i) }))} aria-label="Remove image">×</button>{i > 0 && <button className="l" onClick={() => move(i, -1)} aria-label="Move earlier">←</button>}</div>)}
+          {p.images.map((src, i) => <div className="g" key={src + i}>{isVideo(src) ? <video src={src} muted playsInline preload="metadata" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <img src={src} alt="" />}{isVideo(src) && <em style={{ left: "auto", right: 4 }}>VIDEO</em>}{i === 0 && !isVideo(src) && <em>MAIN</em>}<button className="x" onClick={() => setP((x) => ({ ...x, images: x.images.filter((_, k) => k !== i) }))} aria-label="Remove image">×</button>{i > 0 && <button className="l" onClick={() => move(i, -1)} aria-label="Move earlier">←</button>}</div>)}
           <label className="abtn ghost" style={{ height: 96, width: 96, justifyContent: "center", cursor: "pointer" }}>{up ? "…" : "+ Add"}<input type="file" accept="image/png,image/jpeg,image/webp" multiple hidden onChange={addImages} /></label>
+          <label className="abtn ghost" style={{ height: 96, width: 96, justifyContent: "center", cursor: "pointer" }}>{up ? "…" : "+ Video"}<input type="file" accept="video/mp4,video/webm,video/quicktime" hidden onChange={addVideo} /></label>
         </div>
       </div>
 

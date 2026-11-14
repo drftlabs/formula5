@@ -1,4 +1,5 @@
 "use client";
+import { pics } from "@/lib/img";
 import { ping } from "@/lib/analytics";
 import { track } from "@/lib/track";
 import { createContext, useContext, useEffect, useRef, useState, useCallback } from "react";
@@ -63,9 +64,9 @@ export default function ShopProvider({ children, shipping }) {
     setItems((cur) => {
       const f = cur.find((i) => same(i, p.id, size, cs));
       if (f) return cur.map((i) => (i === f ? { ...i, qty: Math.min(10, i.qty + qty) } : i));
-      return [...cur, { id: p.id, slug: p.slug, name: p.name, price: p.price, image: p.images?.[0] || "", size: String(size), qty, color: cs, colorName: color?.name || "" }];
+      return [...cur, { id: p.id, slug: p.slug, name: p.name, price: p.price, image: pics(p.images)[0] || "", size: String(size), qty, color: cs, colorName: color?.name || "" }];
     });
-    if (!silent) { say(`${p.name} · ${/^\d+$/.test(String(size)) ? "Pack " + size : size}${color?.name ? " · " + color.name : ""} added`, true); setPulse((n) => n + 1); fly(from, p.images?.[0]); }
+    if (!silent) { say(`${p.name} · ${/^\d+$/.test(String(size)) ? "Pack " + size : size}${color?.name ? " · " + color.name : ""} added`, true); setPulse((n) => n + 1); fly(from, pics(p.images)[0]); }
   };
   const setQty = (id, size, qty, color = "") => setItems((cur) => cur.map((i) => (same(i, id, size, color) ? { ...i, qty } : i)).filter((i) => i.qty > 0));
   const remove = (id, size, color = "") => setItems((cur) => cur.filter((i) => !same(i, id, size, color)));

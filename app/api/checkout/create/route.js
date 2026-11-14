@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { pics } from "@/lib/img";
 import Razorpay from "razorpay";
 import { serviceClient, sessionClient } from "@/lib/supabase/server";
 import { getSettings } from "@/lib/data";
@@ -46,7 +47,7 @@ export async function POST(req) {
     if ((Number(p.sizes?.[size]) || 0) < qty) return NextResponse.json({ error: `${p.name} (Pack ${size}) is out of stock or has fewer left than you asked for.` }, { status: 409 });
     const col = p.colors?.includes(it.color) ? it.color : p.colors?.[0] || "";
     const pk = Array.isArray(p.packs) ? p.packs.find((x) => String(x.n) === size) : null;
-    items.push({ id: p.id, name: p.name, size, qty, price: pk ? Number(pk.price) : Number(p.price), image: p.images?.[0] || "", color: cname[col] || col });
+    items.push({ id: p.id, name: p.name, size, qty, price: pk ? Number(pk.price) : Number(p.price), image: pics(p.images)[0] || "", color: cname[col] || col });
   }
   const subtotal = items.reduce((t, i) => t + i.price * i.qty, 0);
 

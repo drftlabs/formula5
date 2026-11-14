@@ -33,6 +33,16 @@ export async function uploadImage(orig, folder = "misc", keepName = false) {
   return browserClient().storage.from("media").getPublicUrl(path).data.publicUrl;
 }
 
+// Product videos: uploaded straight to Vercel Blob from the browser (mp4 / webm / mov, up to 30 MB).
+export async function uploadVideo(file, folder = "products") {
+  if (!/^video\/(mp4|webm|quicktime)$/.test(file.type)) throw new Error("Use an MP4 or WebM video.");
+  if (file.size > 30 * 1024 * 1024) throw new Error("Video is over 30 MB. Compress it (about 5-10 seconds, 720p works well).");
+  const { upload } = await import("@vercel/blob/client");
+  const name = String(file.name || "video.mp4").toLowerCase().replace(/[^a-z0-9.]+/g, "-").slice(-50);
+  const blob = await upload(`${folder}/${name}`, file, { access: "public", handleUploadUrl: "/api/admin/upload-video", contentType: file.type });
+  return blob.url;
+}
+
 export function ImageField({ value, onChange, folder, hint }) {
   const ref = useRef(), [busy, setBusy] = useState(false), [err, setErr] = useState("");
   async function pick(e) {
