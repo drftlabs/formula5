@@ -39,9 +39,14 @@ export async function uploadVideo(file, folder = "products") {
   if (!okType) throw new Error("That is not a video file. (Audio files such as MP3 or WAV have no picture, so they can't be a gallery slide.)");
   if (file.size > 200 * 1024 * 1024) throw new Error("Video is over 200 MB. Please compress it first.");
   const { upload } = await import("@vercel/blob/client");
-  const name = String(file.name || "video.mp4").toLowerCase().replace(/[^a-z0-9.]+/g, "-").slice(-50);
-  const blob = await upload(`${folder}/${name}`, file, { access: "public", handleUploadUrl: "/api/admin/upload-video", contentType: file.type || "video/mp4", multipart: file.size > 20 * 1024 * 1024 });
-  return blob.url;
+  const name = String(file.name || "video.mp4").toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-+/, "").slice(-50) || "video.mp4";
+  try {
+    const blob = await upload(`${folder}/${name}`, file, { access: "public", handleUploadUrl: "/api/admin/upload-video", contentType: file.type || "video/mp4", multipart: file.size > 20 * 1024 * 1024 });
+    return blob.url;
+  } catch (x) {
+    const d = await fetch("/api/admin/upload-video", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ diag: 1, size: file.size, ftype: file.type }) }).then((r) => r.json()).catch(() => ({}));
+    throw new Error(d.why || x.message || "Video upload failed");
+  }
 }
 
 export function ImageField({ value, onChange, folder, hint }) {
