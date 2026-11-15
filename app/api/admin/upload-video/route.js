@@ -15,7 +15,7 @@ export async function POST(req) {
       body, request: req,
       onBeforeGenerateToken: async () => {
         if (!(await getAdmin())) throw new Error("Unauthorized");
-        return { allowedContentTypes: ["video/mp4", "video/webm", "video/quicktime"], maximumSizeInBytes: 30 * 1024 * 1024, addRandomSuffix: true, cacheControlMaxAge: 31536000 };
+        return { allowedContentTypes: ["video/*", "application/octet-stream"], maximumSizeInBytes: 200 * 1024 * 1024, addRandomSuffix: true, cacheControlMaxAge: 31536000 };
       },
       onUploadCompleted: async () => {},
     });

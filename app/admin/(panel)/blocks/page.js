@@ -1,4 +1,5 @@
 import { serviceClient } from "@/lib/supabase/server";
+import { pics } from "@/lib/img";
 import ResourceManager from "@/components/admin/ResourceManager";
 
 const base = [{ name: "title", label: "Admin label", type: "text", help: "Only you see this." }, { name: "enabled", label: "Show on homepage", type: "checkbox" }];
@@ -39,7 +40,7 @@ const makeFields = (products) => ({
 export default async function Page() {
   const sb = serviceClient();
   const [{ data }, { data: prods }] = await Promise.all([sb.from("blocks").select("*").order("sort_order"), sb.from("products").select("id,name,images,active").order("name")]);
-  const fieldsByType = makeFields((prods || []).map((p) => ({ id: p.id, name: p.name + (p.active ? "" : " (hidden)"), img: p.images?.[0] || "" })));
+  const fieldsByType = makeFields((prods || []).map((p) => ({ id: p.id, name: p.name + (p.active ? "" : " (hidden)"), img: pics(p.images)[0] || "" })));
   fieldsByType.collections = fieldsByType.collections.filter((f) => f.name !== "__note");
   return <><h1>Block placement</h1><p className="sub">Control the homepage layout. Use ▲▼ to place each block higher or lower, switch blocks on/off, and edit their text and images. You can add extra product rows (for example a “Bestsellers” strip filtered by tag) or more banners.</p>
     <ResourceManager table="blocks" rows={data || []} fieldsByType={fieldsByType} sortable titleKey="title"

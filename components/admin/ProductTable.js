@@ -1,4 +1,5 @@
 "use client";
+import { pics } from "@/lib/img";
 import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -54,7 +55,7 @@ export default function ProductTable({ products, collections, tags }) {
       )}
       <div className="tblwrap"><table className="tbl"><thead><tr><th><input type="checkbox" aria-label="Select all" checked={all} onChange={() => setSel(all ? [] : list.map((p) => p.id))} /></th><th></th><th>Name</th><th>SKU</th><th>Collections</th><th>Price</th><th>Stock</th><th>Tags</th><th>Status</th></tr></thead><tbody>
         {list.map((p) => { const s = stockOf(p), low = s <= 5; const ids = p.collection_ids?.length ? p.collection_ids : p.collection_id ? [p.collection_id] : []; return (
-          <tr key={p.id}><td><input type="checkbox" aria-label={`Select ${p.name}`} checked={sel.includes(p.id)} onChange={() => toggle(p.id)} /></td><td><div className="thumbs-adm">{p.images?.[0] && <img src={p.images[0]} alt="" />}</div></td>
+          <tr key={p.id}><td><input type="checkbox" aria-label={`Select ${p.name}`} checked={sel.includes(p.id)} onChange={() => toggle(p.id)} /></td><td><div className="thumbs-adm">{pics(p.images)[0] && <img src={pics(p.images)[0]} alt="" />}</div></td>
             <td><Link href={`/admin/products/${p.id}`}><b>{p.name}</b></Link>{p.featured && <span className="mut"> ★</span>}</td><td className="mut">{p.sku || "-"}</td><td className="mut">{ids.map((i) => cn[i]).filter(Boolean).join(", ") || "-"}</td><td>{inr(p.price)}</td>
             <td style={s === 0 ? { color: "#A33B34" } : low ? { color: "#ffb86b" } : undefined}>{s === 0 ? "Out" : s}</td>
             <td>{(p.tags || []).map((t) => tm[t] && <span key={t} className="pill" style={{ background: tm[t].bg, color: tm[t].fg, marginRight: 4 }}>{tm[t].name}</span>)}</td><td>{p.active ? "Live" : <span className="mut">Hidden</span>}</td></tr>); })}

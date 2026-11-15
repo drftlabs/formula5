@@ -33,13 +33,14 @@ export async function uploadImage(orig, folder = "misc", keepName = false) {
   return browserClient().storage.from("media").getPublicUrl(path).data.publicUrl;
 }
 
-// Product videos: uploaded straight to Vercel Blob from the browser (mp4 / webm / mov, up to 30 MB).
+// Product videos: uploaded straight to Vercel Blob from the browser (any video format, up to 200 MB).
 export async function uploadVideo(file, folder = "products") {
-  if (!/^video\/(mp4|webm|quicktime)$/.test(file.type)) throw new Error("Use an MP4 or WebM video.");
-  if (file.size > 30 * 1024 * 1024) throw new Error("Video is over 30 MB. Compress it (about 5-10 seconds, 720p works well).");
+  const okType = /^video\//.test(file.type) || /\.(mp4|m4v|mov|webm|ogv|mkv|avi|3gp|3g2|mpg|mpeg|wmv|flv|ts)$/i.test(file.name || "");
+  if (!okType) throw new Error("That is not a video file. (Audio files such as MP3 or WAV have no picture, so they can't be a gallery slide.)");
+  if (file.size > 200 * 1024 * 1024) throw new Error("Video is over 200 MB. Please compress it first.");
   const { upload } = await import("@vercel/blob/client");
   const name = String(file.name || "video.mp4").toLowerCase().replace(/[^a-z0-9.]+/g, "-").slice(-50);
-  const blob = await upload(`${folder}/${name}`, file, { access: "public", handleUploadUrl: "/api/admin/upload-video", contentType: file.type });
+  const blob = await upload(`${folder}/${name}`, file, { access: "public", handleUploadUrl: "/api/admin/upload-video", contentType: file.type || "video/mp4", multipart: file.size > 20 * 1024 * 1024 });
   return blob.url;
 }
 

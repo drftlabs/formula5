@@ -56,11 +56,11 @@ export default function ProductForm({ product, collections, tags, sizeKeys, cate
       </div>
 
       <div className="panel"><h2 style={{ marginTop: 0 }}>Images</h2>
-        <p className="hint mut" style={{ marginBottom: 12, fontSize: 12 }}>First image is the main one: square product shot on a clean background, same angle across products. Big files are shrunk to 1600px WebP automatically. Video: add with “+ Video” (MP4/WebM, up to 30 MB, keep it 5–10 s). It plays on its own, muted and looping, with no controls; put it anywhere in the order, but not first if you want a photo on cards and share previews.</p>
+        <p className="hint mut" style={{ marginBottom: 12, fontSize: 12 }}>First image is the main one: square product shot on a clean background, same angle across products. Big files are shrunk to 1600px WebP automatically. Video: add with “+ Video” (any video format, up to 200 MB; MP4 or WebM, 5–10 s works best everywhere). It plays on its own, muted and looping, with no controls; put it anywhere in the order, but not first if you want a photo on cards and share previews.</p>
         <div className="gallery-adm">
           {p.images.map((src, i) => <div className="g" key={src + i}>{isVideo(src) ? <video src={src} muted playsInline preload="metadata" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <img src={src} alt="" />}{isVideo(src) && <em style={{ left: "auto", right: 4 }}>VIDEO</em>}{i === 0 && !isVideo(src) && <em>MAIN</em>}<button className="x" onClick={() => setP((x) => ({ ...x, images: x.images.filter((_, k) => k !== i) }))} aria-label="Remove image">×</button>{i > 0 && <button className="l" onClick={() => move(i, -1)} aria-label="Move earlier">←</button>}</div>)}
           <label className="abtn ghost" style={{ height: 96, width: 96, justifyContent: "center", cursor: "pointer" }}>{up ? "…" : "+ Add"}<input type="file" accept="image/png,image/jpeg,image/webp" multiple hidden onChange={addImages} /></label>
-          <label className="abtn ghost" style={{ height: 96, width: 96, justifyContent: "center", cursor: "pointer" }}>{up ? "…" : "+ Video"}<input type="file" accept="video/mp4,video/webm,video/quicktime" hidden onChange={addVideo} /></label>
+          <label className="abtn ghost" style={{ height: 96, width: 96, justifyContent: "center", cursor: "pointer" }}>{up ? "…" : "+ Video"}<input type="file" accept="video/*,.mp4,.m4v,.mov,.webm,.ogv,.mkv,.avi,.3gp,.mpg,.wmv" hidden onChange={addVideo} /></label>
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 "use client";
+import { pics } from "@/lib/img";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { setCollectionProducts } from "@/lib/actions/admin";
@@ -17,7 +18,7 @@ export default function CollectionProducts({ collection, products, selected }) {
         {msg && <span className={"flash" + (msg.err ? " err" : "")} style={{ margin: 0 }}>{msg.err || msg.ok}</span>}
       </div>
       <div className="pickgrid">
-        {shown.map((p) => <label key={p.id} className={"pick" + (sel.includes(p.id) ? " on" : "")}><input type="checkbox" checked={sel.includes(p.id)} onChange={() => t(p.id)} /><div className="th">{p.images?.[0] && <img src={p.images[0]} alt="" />}</div><b>{p.name}</b><small>{p.active ? "Live" : "Hidden"}</small></label>)}
+        {shown.map((p) => <label key={p.id} className={"pick" + (sel.includes(p.id) ? " on" : "")}><input type="checkbox" checked={sel.includes(p.id)} onChange={() => t(p.id)} /><div className="th">{pics(p.images)[0] && <img src={pics(p.images)[0]} alt="" />}</div><b>{p.name}</b><small>{p.active ? "Live" : "Hidden"}</small></label>)}
       </div>
     </>
   );
