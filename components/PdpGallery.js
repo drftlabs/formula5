@@ -8,10 +8,9 @@ import { isVideo } from "@/lib/img";
 // A zoom button opens a full-screen viewer. Built for JPEGs that carry their own background; placeholders stand in until photos exist.
 // A video slide plays by itself, muted and looping, with no controls. It only runs while it is the visible slide.
 function Clip({ src, active }) {
-  const v = useRef(), [fit, setFit] = useState("cover");
+  const v = useRef();
   useEffect(() => { const el = v.current; if (!el) return; if (active) { el.muted = true; const p = el.play(); p && p.catch(() => {}); } else el.pause(); }, [active]);
-  return <video ref={v} src={src} muted loop autoPlay playsInline preload="auto" disablePictureInPicture disableRemotePlayback controlsList="nodownload nofullscreen noremoteplayback" tabIndex={-1} aria-hidden="true" onContextMenu={(e) => e.preventDefault()} style={{ objectFit: fit }}
-    onLoadedMetadata={(e) => { const { videoWidth: w, videoHeight: h } = e.currentTarget; const r = w && h ? w / h : 1; setFit(r > 0.85 && r < 1.2 ? "cover" : "contain"); }} />;
+  return <video ref={v} src={src} muted loop autoPlay playsInline preload="auto" disablePictureInPicture disableRemotePlayback controlsList="nodownload nofullscreen noremoteplayback" tabIndex={-1} aria-hidden="true" onContextMenu={(e) => e.preventDefault()} style={{ objectFit: "cover", objectPosition: "center", width: "100%", height: "100%" }} />;
 }
 const Slide = ({ s, product, sub, k, big, active }) => s.src && isVideo(s.src)
   ? <Clip src={s.src} active={active} />
