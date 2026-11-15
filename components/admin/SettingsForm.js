@@ -21,6 +21,7 @@ const G = [
     { name: "cod_prepaid_pct", label: "COD: % of product amount paid online upfront", type: "number", help: "10 = customer pays 10% of the product amount via Razorpay; the rest plus the COD fee is paid in cash. 0 (and flat below also 0) = pure COD, verified with a WhatsApp code instead." },
     { name: "cod_prepaid_flat", label: "COD: flat advance (₹), optional", type: "number", help: "e.g. 50 or 100. If set above 0 it is used instead of the %. 0 = use the % above." },
     { name: "cod_fee", label: "COD delivery fee (₹)", type: "number", help: "Added to every COD order and shown at checkout." },
+    { name: "manufacturer", label: "Manufacturer / packer details", type: "textarea", full: true, help: "Name, address and licence numbers as printed on your packs. Shown on the How we make it page. Blank = that section is hidden." },
     { name: "whatsapp", label: "WhatsApp number (with country code)", type: "text", help: "e.g. 919876543210. Shows a chat button on the site. Blank = hidden." },
     { name: "meta_pixel_id", label: "Meta (Facebook) Pixel ID", type: "text", help: "Digits only, from Meta Events Manager. Tracks PageView, ViewContent, AddToCart, InitiateCheckout and Purchase for your ads. Blank = off." }]],
 ];

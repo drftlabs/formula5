@@ -21,7 +21,7 @@ export default function Footer({ settings, categories = [] }) {
             {cols ? cols.map((c) => <div key={c.title}><h4>{c.title}</h4>{(c.links || []).map((l) => <Link key={l.href + l.label} href={l.href}>{l.label}</Link>)}</div>) : (
               <>
                 <div><h4>Shop</h4><Link href="/collections/all">All products</Link>{categories.map((c) => <Link key={c.id} href={`/categories/${c.slug}`}>{c.name}</Link>)}</div>
-                <div><h4>Formula 5</h4><Link href="/our-story">Our story</Link><Link href="/contact">Contact</Link><Link href="/complaint">Raise a complaint</Link><TrackOpen className="f5-tracklink">Track order</TrackOpen><Link href="/account">Account</Link></div>
+                <div><h4>Formula 5</h4><Link href="/our-story">Our story</Link><Link href="/how-we-make-it">How we make it</Link><Link href="/contact">Contact</Link><Link href="/complaint">Raise a complaint</Link><TrackOpen className="f5-tracklink">Track order</TrackOpen><Link href="/account">Account</Link></div>
                 <div><h4>Policies</h4>{POLICY_LIST.filter((p) => !["returns", "exchange"].includes(p.slug)).map((p) => <Link key={p.slug} href={`/policies/${p.slug}`}>{p.title}</Link>)}</div>
               </>
             )}

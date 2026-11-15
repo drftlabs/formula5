@@ -1,5 +1,6 @@
 "use client";
 import { pics } from "@/lib/img";
+import { comboSavings } from "@/lib/combos";
 import { ping } from "@/lib/analytics";
 import { track } from "@/lib/track";
 import { createContext, useContext, useEffect, useRef, useState, useCallback } from "react";
@@ -57,14 +58,14 @@ export default function ShopProvider({ children, shipping }) {
   }, []);
 
   // add(product, size, qty, silent, colour {slug,name}, element-to-fly-from)
-  const add = (p, size, qty = 1, silent = false, color = null, from = null) => {
+  const add = (p, size, qty = 1, silent = false, color = null, from = null, combo = "") => {
     const cs = color?.slug || "";
     ping({ t: "cart", path: typeof location !== "undefined" ? location.pathname : "/" });
     track("AddToCart", { content_ids: [p.id], content_name: p.name, content_type: "product", value: p.price * qty, currency: "INR" });
     setItems((cur) => {
       const f = cur.find((i) => same(i, p.id, size, cs));
-      if (f) return cur.map((i) => (i === f ? { ...i, qty: Math.min(10, i.qty + qty) } : i));
-      return [...cur, { id: p.id, slug: p.slug, name: p.name, price: p.price, image: pics(p.images)[0] || "", size: String(size), qty, color: cs, colorName: color?.name || "" }];
+      if (f) return cur.map((i) => (i === f ? { ...i, qty: Math.min(10, i.qty + qty), combo: combo || i.combo || "" } : i));
+      return [...cur, { id: p.id, slug: p.slug, name: p.name, price: p.price, image: pics(p.images)[0] || "", size: String(size), qty, color: cs, colorName: color?.name || "", combo }];
     });
     if (!silent) { say(`${p.name} · ${/^\d+$/.test(String(size)) ? "Pack " + size : size}${color?.name ? " · " + color.name : ""} added`, true); setPulse((n) => n + 1); fly(from, pics(p.images)[0]); }
   };
@@ -79,11 +80,11 @@ export default function ShopProvider({ children, shipping }) {
   };
 
   const count = items.reduce((t, i) => t + i.qty, 0);
-  const subtotal = items.reduce((t, i) => t + i.qty * i.price, 0);
+  const subtotal = items.reduce((t, i) => t + i.qty * i.price, 0), comboOff = comboSavings(items);
   const ship = subtotal === 0 ? 0 : subtotal >= shipping.min ? 0 : shipping.fee;
 
   return (
-    <Ctx.Provider value={{ items, count, subtotal, ship, total: subtotal + ship, shipping, add, setQty, remove, clear, wish, toggleWish, drawer, setDrawer, qc, setQc, pulse, email, say, ready }}>
+    <Ctx.Provider value={{ items, count, subtotal, comboOff, ship, total: subtotal + ship, shipping, add, setQty, remove, clear, wish, toggleWish, drawer, setDrawer, qc, setQc, pulse, email, say, ready }}>
       {children}
       <div className={"toast" + (toast ? " show" : "")} role="status" aria-live="polite">
         <i /><span>{toast?.text}</span>

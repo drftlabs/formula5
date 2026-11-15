@@ -7,7 +7,7 @@ import { inr } from "@/lib/format";
 import { Arrow } from "./Media";
 
 export default function CartDrawer() {
-  const { items, count, subtotal, shipping, setQty, remove, drawer, setDrawer } = useShop();
+  const { items, count, subtotal, comboOff, shipping, setQty, remove, drawer, setDrawer } = useShop();
   const closeRef = useRef();
   useEffect(() => {
     document.body.style.overflow = drawer ? "hidden" : "";
@@ -38,7 +38,7 @@ export default function CartDrawer() {
             </>
           )}
         </div>
-        {count > 0 && <div className="d-foot"><div className="sub"><span>Subtotal</span><span>{inr(subtotal)}</span></div><small>Shipping and taxes are shown at checkout. Secure payments.</small><Link className="btn" href="/checkout" onClick={() => setDrawer(false)}>Checkout <Arrow /></Link></div>}
+        {count > 0 && <div className="d-foot">{comboOff > 0 && <div className="sub" style={{ color: "#2F8A4E" }}><span>Combo saving</span><span>−{inr(comboOff)}</span></div>}<div className="sub"><span>Subtotal</span><span>{inr(subtotal - comboOff)}</span></div><small>Shipping and taxes are shown at checkout. Secure payments.</small><Link className="btn" href="/checkout" onClick={() => setDrawer(false)}>Checkout <Arrow /></Link></div>}
       </aside>
     </div>
   );

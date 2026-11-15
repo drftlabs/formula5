@@ -35,6 +35,7 @@ export default function ProductCard({ p, category, accent, tagMap = {} }) {
       <div className="f5-info">
         {category && <div className="f5-cat-l">{category}</div>}
         <h3 className="f5-name"><Link href={`/products/${p.slug}`}>{short}</Link></h3>
+        {p.rating?.count > 0 && <div className="f5-rate" aria-label={`Rated ${p.rating.avg} out of 5 from ${p.rating.count} reviews`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1L12 16.8 6.6 19.8l1.1-6.1L3.2 9.4l6.1-.8L12 3z" /></svg><b>{p.rating.avg.toFixed(1)}</b><small>({p.rating.count})</small></div>}
         <div className="f5-price"><b>{inr(pack.price)}</b>{pack.mrp > pack.price && <s>{inr(pack.mrp)}</s>}{off > 0 && <em>{off}% off</em>}</div>
         <button className={"f5-add" + (added ? " ok" : "")} disabled={sold} aria-label={sold ? `${short} is sold out` : `Add ${short} to bag`} onClick={quick}>
           {sold ? "Sold out" : added ? <><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>Added</> : "Add to bag"}

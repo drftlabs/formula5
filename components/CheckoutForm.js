@@ -20,7 +20,7 @@ function loadRzp() {
 const EMPTY = { name: "", email: "", phone: "", pin: "", area: "", line1: "", line2: "", city: "", state: "" };
 
 export default function CheckoutForm({ modal = false, onClose }) {
-  const { items, subtotal, shipping: cfg, clear, setQty, remove, email: loginEmail, ready } = useShop();
+  const { items, subtotal, comboOff, shipping: cfg, clear, setQty, remove, email: loginEmail, ready } = useShop();
   const router = useRouter();
   const [f, setF] = useState(EMPTY), [areas, setAreas] = useState([]), [pinMsg, setPinMsg] = useState("");
   const ONLINE = !!process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID; // online payments appear once Razorpay keys are added
@@ -53,8 +53,8 @@ export default function CheckoutForm({ modal = false, onClose }) {
 
   const contactOk = f.name.trim().length > 1 && /^\S+@\S+\.\S+$/.test(f.email) && f.phone.replace(/\D/g, "").length >= 10;
   const addrOk = /^\d{6}$/.test(f.pin) && f.line1.trim().length > 3 && f.city.trim() && f.state;
-  const price = useMemo(() => priceOrder({ subtotal, method, cfg, discount: rule }), [subtotal, method, cfg, rule]);
-  const alt = useMemo(() => priceOrder({ subtotal, method: method === "cod" ? "online" : "cod", cfg, discount: rule }), [subtotal, method, cfg, rule]);
+  const price = useMemo(() => priceOrder({ subtotal, method, cfg, discount: rule, comboOff }), [subtotal, comboOff, method, cfg, rule]);
+  const alt = useMemo(() => priceOrder({ subtotal, method: method === "cod" ? "online" : "cod", cfg, discount: rule, comboOff }), [subtotal, comboOff, method, cfg, rule]);
   const online = method === "cod" ? alt : price, cod = method === "cod" ? price : alt;
 
   async function applyCode() {
@@ -103,7 +103,7 @@ export default function CheckoutForm({ modal = false, onClose }) {
       try { sessionStorage.setItem("tk_last", JSON.stringify({ o: num, total, due, method, name: f.name, addr: [f.line1, f.line2, f.area, f.city, f.state, f.pin].filter(Boolean).join(", "), items: items.map((i) => ({ n: i.name, s: i.size, c: i.colorName || "", q: i.qty, p: i.price, img: i.image })) })); } catch {}
       clear(); onClose?.(); router.push(`/checkout/success?o=${encodeURIComponent(num)}${due ? `&due=${due}` : ""}${total ? `&v=${total}` : ""}&m=${method}`); };
     try {
-      const r = await fetch("/api/checkout/create", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items: items.map((i) => ({ id: i.id, size: i.size, qty: i.qty, color: i.color || "" })), method, code: rule?.code || "", customer: { name: f.name, email: f.email, phone: f.phone }, wa: needWA, address: { line1: f.line1, line2: f.line2, area: f.area, city: f.city, state: f.state, pin: f.pin } }) });
+      const r = await fetch("/api/checkout/create", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items: items.map((i) => ({ id: i.id, size: i.size, qty: i.qty, color: i.color || "", combo: i.combo || "" })), method, code: rule?.code || "", customer: { name: f.name, email: f.email, phone: f.phone }, wa: needWA, address: { line1: f.line1, line2: f.line2, area: f.area, city: f.city, state: f.state, pin: f.pin } }) });
       const d = await r.json(); if (!r.ok) throw new Error(d.error || "Could not start payment");
       if (d.cod) return done(d.orderNumber, d.due, d.total);
       await loadRzp();
@@ -161,7 +161,7 @@ export default function CheckoutForm({ modal = false, onClose }) {
               <div className="code-row">{rule ? <div className="code-ok"><b>{rule.code}</b> applied <button type="button" onClick={() => { setRule(null); setCode(""); setCodeMsg(null); }}>Remove</button></div> : <><input aria-label="Discount code" placeholder="Discount code" value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), applyCode())} /><button type="button" onClick={applyCode}>Apply</button></>}</div>
               {codeMsg && <p className={"hint" + (codeMsg.ok ? " ok" : " bad")}>{codeMsg.t}</p>}
               <div className="line"><span>Subtotal</span><span>{inr(price.subtotal)}</span></div>
-              {price.discount > 0 && <div className="line save"><span>Discount</span><span>−{inr(price.discount)}</span></div>}
+              {price.discount > 0 && <div className="line save"><span>{comboOff > 0 && !rule ? "Combo saving" : "Discount"}</span><span>−{inr(price.discount)}</span></div>}
               <div className="line"><span>{method === "cod" ? "COD delivery fee" : "Shipping"}</span><span>{price.shipping ? inr(price.shipping) : "Free"}</span></div>
               <div className="line tot"><span>Total</span><span>{inr(price.total)}</span></div>
               {method === "cod" && price.payNow > 0 && <div className="line split"><span>Pay now (advance)</span><span>{inr(price.payNow)}</span></div>}

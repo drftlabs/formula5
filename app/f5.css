@@ -853,3 +853,120 @@ body:has(.pd-float) .f5ai-fab{bottom:calc(112px + env(safe-area-inset-bottom,0px
 .f5ai-in input:focus{outline:0;border-color:var(--ink)}
 .f5ai-in button{width:42px;height:42px;border-radius:var(--r);background:var(--ink);display:grid;place-items:center}.f5ai-in button:disabled{opacity:.4}
 .f5ai-in svg{width:18px;height:18px;fill:#fff}
+
+/* ratings on cards + reviews pages */
+.f5-rate{display:flex;align-items:center;gap:4px;margin:2px 0 4px;font:600 12px/1 var(--font);color:var(--ink)}
+.f5-rate svg{width:13px;height:13px;fill:var(--gold);stroke:none}.f5-rate small{color:var(--mute);font-weight:500;font-size:11.5px}
+.rv-all{display:block;text-align:center;padding:14px;border:var(--bw) solid var(--ink);border-radius:var(--r);font:600 12px/1 var(--font);letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.rv-all:hover{background:var(--ink);color:#fff}
+.rv-back{display:inline-block;margin:6px 0 14px;font:600 12px/1 var(--font);letter-spacing:.08em;color:var(--mute)}
+.rv-top{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:18px 0 20px}.rv-top b{font:300 40px/1 var(--serif)}.rv-top span{color:var(--mute);font-size:13px}
+.rv-sort{margin-left:auto;display:flex;gap:6px}.rv-sort a{padding:8px 12px;border:var(--bw) solid var(--line2);border-radius:999px;font:600 12px/1 var(--font);color:var(--ink)}.rv-sort a.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rv-page .rv-list{max-width:760px}
+.rv-pager{display:flex;align-items:center;justify-content:space-between;max-width:760px;margin:22px 0 4px}.rv-pager a{font:600 12px/1 var(--font);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:3px;color:var(--ink)}.rv-pager em{font-style:normal;color:var(--mute);font-size:12px}
+.pd-buy .pd-rate{margin:10px 0 12px}
+.rv-card .f5-stars svg,.rv-sum .f5-stars svg{fill:var(--gold)}.rv-card .f5-stars svg.off,.rv-sum .f5-stars svg.off{fill:var(--line2)}
+.pd-ing .pd-ing-t{margin:0;font:500 13px/1.65 var(--font);color:var(--ink);letter-spacing:.01em}
+.pd-ing .pd-ing-t{display:flex;flex-wrap:wrap;align-items:center;gap:6px 4px;font:inherit}
+.pd-ing-t>span{display:inline-flex;align-items:center;gap:4px}
+.pd-ing-t b{padding:6px 10px;background:var(--gold-white);border-radius:var(--r-sm);font:600 10.5px/1.2 var(--font);letter-spacing:.05em;color:var(--ink)}
+.pd-ing-t .plus{font:600 13px/1 var(--font);font-style:normal;color:var(--gold)}
+.pd-f5x{padding:0 0 6px!important}.pd-f5-h{margin-top:0}@media(min-width:900px){.pd-f5x{padding:8px var(--pad) 10px!important}}
+
+/* spec strip */
+.pd-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:22px 0 0;border-top:var(--bw) solid var(--line2);border-bottom:var(--bw) solid var(--line2)}
+.pd-facts>div{padding:14px 4px 14px 0;border-bottom:var(--bw) solid var(--line)}.pd-facts>div:nth-last-child(-n+2){border-bottom:0}
+.pd-facts dt{font:600 10px/1 var(--font);letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+.pd-facts dd{margin:0;font:500 13.5px/1.35 var(--font);color:var(--ink)}
+@media(min-width:760px){.pd-facts{grid-template-columns:repeat(4,minmax(0,1fr))}.pd-facts>div{border-bottom:0;padding-left:18px;border-left:var(--bw) solid var(--line)}.pd-facts>div:first-child{border-left:0;padding-left:0}}
+/* quieter colour: the discount badge is a hairline label, not a filled chip */
+.pd-price em,.f5-price em{background:none!important;border:var(--bw) solid var(--line2);color:#6a4f14}
+/* gentle motion: slower, softer, nothing bounces */
+.btn,.pd-now,.pd-add,.pd-qty,.pd-heart,.pd-packs button,.f5-add,.f5-chip,.f5-heart,.pg-arr,.pg-zoom,.rv-all,.pay-opt{transition:background-color .45s var(--ease),color .45s var(--ease),border-color .45s var(--ease),opacity .45s var(--ease)}
+.f5-pm-img{transition:transform 1.4s var(--ease)}.f5-card:hover .f5-pm-img{transform:scale(1.015)}
+.f5-card:hover .bt,.f5-cat:hover .f5-cat-art{transform:none}.f5-cat:hover .media img{transform:scale(1.015)}
+.f5ai-fab:hover{transform:none}
+@media(max-width:759px){.pd-facts{padding:0 var(--pad)}}
+
+/* sticky bar steps aside at the footer; no reserved gap under it */
+.pd-float{transition:transform .5s var(--ease)}.pd-float.gone{transform:translateY(120%);pointer-events:none}
+body:has(.pd-float.gone){padding-bottom:0!important}
+/* top ingredients: small boxes, 2 to 3 per line, alternating colours */
+.pd-ing .pd-ing-t{gap:5px 3px}
+.pd-ing-t b{padding:4px 7px;font:600 9.5px/1.25 var(--font);letter-spacing:.03em;border-radius:5px}
+.pd-ing-t>span:nth-child(odd) b{background:#F2E8CE}.pd-ing-t>span:nth-child(even) b{background:#E3EADF}
+.pd-ing-t .plus{font-size:11px}
+/* good for: compact, with benefit points */
+.pd-con{margin:10px 0 4px;gap:6px}
+.pd-ben{list-style:none;flex-basis:100%;display:grid;gap:5px;margin:6px 0 0;padding:0}
+.pd-ben li{position:relative;padding-left:16px;font:400 12.5px/1.45 var(--font);color:var(--mute)}
+.pd-ben li:before{content:"";position:absolute;left:2px;top:.6em;width:6px;height:1px;background:var(--gold)}
+/* side padding for the description on phones */
+@media(max-width:759px){.pd .pd-desc .f5-wrap.pd-pad{padding-left:max(var(--pad),20px);padding-right:max(var(--pad),20px)}}
+
+/* ---- combo, ink band, rhythm, hero active ---- */
+.pd-ink{background:#1d1b18;color:#f4efe4;padding:44px 0;text-align:center;margin:0}
+.pd-ink-k{font:600 10px/1 var(--font);letter-spacing:.24em;text-transform:uppercase;color:#b8975a;margin:0 0 10px}
+.pd-ink-n{font-family:var(--serif);font-weight:300;font-size:clamp(56px,16vw,96px);line-height:1;margin:0;color:#d4b574}
+.pd-ink-a{font:600 12px/1.4 var(--font);letter-spacing:.14em;text-transform:uppercase;margin:12px 0 0}
+.pd-ink-t{font-family:var(--serif);font-style:italic;font-size:15px;opacity:.7;margin:10px 0 0}
+.pd-combo{padding:44px 0;background:var(--ivory,#faf7f0)}
+.cb-wrap{max-width:560px;margin:0 auto;padding:0 4px}
+.cb-eye{font:600 10px/1 var(--font);letter-spacing:.22em;text-transform:uppercase;color:#8a6b2c;margin:0 0 8px;text-align:center}
+.cb-h{font-family:var(--serif);font-weight:400;font-size:24px;text-align:center;margin:0 0 20px}
+.cb-row{display:flex;align-items:flex-start;justify-content:center;gap:0}
+.cb-item-w{display:flex;align-items:flex-start;flex:1 1 0;min-width:0}
+.cb-plus{font-style:normal;color:#8a6b2c;font-size:18px;padding:20px 4px 0}
+.cb-item{display:block;flex:1;min-width:0;text-align:center;text-decoration:none;color:inherit}
+.cb-img{display:block;width:100%;max-width:84px;aspect-ratio:1;margin:0 auto 6px;background:#fff;border:1px solid #e6dfd0;overflow:hidden}
+.cb-img img{width:100%;height:100%;object-fit:contain;display:block}
+.cb-item b{display:block;font:600 10px/1.3 var(--font);letter-spacing:.02em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.cb-item em{display:block;font:500 11px/1.4 var(--font);font-style:normal;color:#6b665c;margin-top:2px}
+.cb-foot{margin-top:22px;border-top:1px solid #e6dfd0;padding-top:18px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.cb-pr span{display:block;font:500 12px/1 var(--font);color:#6b665c;margin-bottom:6px}
+.cb-pr strong{font-family:var(--serif);font-weight:400;font-size:30px;margin-right:8px}
+.cb-pr s{color:#9a948a;font-size:14px}
+.cb-pr u{display:block;text-decoration:none;color:#2F8A4E;font:600 11px/1 var(--font);letter-spacing:.06em;margin-top:6px}
+.cb-btn{width:100%;max-width:320px}
+.pd-f5x,.pd-desc,.pd-combo{scroll-margin-top:70px}
+.pd-f5-h,.cb-h{letter-spacing:-.005em}
+.pd-active{display:block;background:none;padding:0;margin:10px 0}
+.pd-active b{display:block;font-family:var(--serif);font-weight:300;font-size:44px;line-height:1;color:#8a6b2c}
+
+/* tighter pass */
+.pd-active b{font-size:31px}
+.pd-facts{margin-top:0!important}
+.pd-info{padding-bottom:0}
+.pd-grid{padding-bottom:18px!important}
+.pd-f5-h strong{font-weight:700}
+.pd-ink{padding:20px 0}
+.pd-ink-n{font-size:clamp(38px,11vw,56px)}
+.pd-ink-a{margin:6px 0 0;font-size:11px}
+.pd-ink-t{margin:6px 0 0;font-size:13px}
+.pd-combo{padding:20px 0 24px}
+.cb-wrap{padding:0}
+.cb-img{max-width:64px;margin-bottom:4px}
+.cb-plus{padding-top:14px}
+.cb-pr{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:2px 8px;margin:14px 0 10px;text-align:center}
+.cb-pr span{display:inline;font:500 12px/1 var(--font);color:#6b665c;margin:0}
+.cb-pr strong{font-size:24px;margin:0}
+.cb-pr s{font-size:13px}
+.cb-pr u{display:inline;margin:0;font-size:10.5px}
+.cb-btn{max-width:none;display:block;margin:0 auto}
+.pd-combo .f5-wrap{padding-left:var(--pad);padding-right:var(--pad)}
+
+/* always-on buy bar, remaining ingredients */
+.pd-float.gone{transform:none!important;pointer-events:auto!important}
+body:has(.pd-float.gone){padding-bottom:inherit!important}
+.pd-ing-r{margin:10px 0 0;font:400 12px/1.6 var(--font);color:var(--mute)}
+.pd-ing-r b{font-weight:600;color:var(--ink);letter-spacing:.06em;text-transform:uppercase;font-size:10px;margin-right:4px}
+
+/* sage accent (idea 5): calm clinical green for savings, combo and trust moments; gold stays for brand */
+:root{--sage:#5f7f69;--sage-soft:#eef2ec;--sage-line:#d5ded3}
+.pd-combo{background:var(--sage-soft);border-top:1px solid var(--sage-line);border-bottom:1px solid var(--sage-line)}
+.cb-img{border-color:var(--sage-line)}
+.cb-plus{color:var(--sage)}
+.cb-pr u,.line.save,.cb-pr u{color:var(--sage)}
+.cb-btn{background:var(--sage)!important;color:#fff!important}
+.pd-ing-r b{color:var(--sage)}
+.pd-ink-k,.pd-ink-n{color:#d4b574}

@@ -7,6 +7,8 @@ const fields = [
   { name: "rating", label: "Rating (1 to 5)", type: "number" },
   { name: "title", label: "Title", type: "text" },
   { name: "body", label: "Review", type: "textarea", full: true },
+  { name: "review_date", label: "Review date", type: "date", help: "Shown under the review. Blank = date added." },
+  { name: "reply", label: "Formula 5 reply (optional)", type: "textarea", full: true },
   { name: "verified", label: "Verified buyer", type: "checkbox" },
   { name: "approved", label: "Approved (shown on the store)", type: "checkbox" },
   { name: "featured", label: "Featured on the home page", type: "checkbox" },

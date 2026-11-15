@@ -9,7 +9,7 @@ import { slugify, inr } from "@/lib/format";
 
 export default function ProductForm({ product, collections, tags, sizeKeys, categories = [], concerns = [] }) {
   const isNew = !product;
-  const blank = { name: "", slug: "", price: "", compare_price: "", cost_price: "", sku: "", barcode: "", weight_g: "", vendor: "Formula 5", product_type: "", description: "", long_description: "", details: "", seo_title: "", seo_description: "", images: [], extra_images: [], colors: [], tags: [], packs: sizeKeys.map((n) => ({ n: Number(n), price: "", mrp: "", sku: "" })), category: "", concerns: [], tagline: "", top_ingredients: ["", "", ""], how_to_use: "", ingredients_raw: "", usp: "", sizes: Object.fromEntries(sizeKeys.map((s) => [s, 0])), collection_ids: [], active: true, featured: false, low_stock: 3, sort_order: 0 };
+  const blank = { name: "", slug: "", price: "", compare_price: "", cost_price: "", sku: "", barcode: "", weight_g: "", vendor: "Formula 5", product_type: "", description: "", long_description: "", details: "", seo_title: "", seo_description: "", images: [], extra_images: [], colors: [], tags: [], packs: sizeKeys.map((n) => ({ n: Number(n), price: "", mrp: "", sku: "" })), category: "", concerns: [], tagline: "", top_ingredients: ["", "", ""], how_to_use: "", ingredients_raw: "", usp: "", benefits: "", best_for: "", sizes: Object.fromEntries(sizeKeys.map((s) => [s, 0])), collection_ids: [], active: true, featured: false, low_stock: 3, sort_order: 0 };
   const init = product ? { ...blank, ...Object.fromEntries(Object.entries(product).map(([k, v]) => [k, v ?? blank[k] ?? ""])), collection_ids: product.collection_ids?.length ? product.collection_ids : product.collection_id ? [product.collection_id] : [] } : blank;
   const fixPacks = (a) => sizeKeys.map((n) => { const k = (a || []).find((x) => String(x.n) === String(n)); return { n: Number(n), price: k?.price ?? "", mrp: k?.mrp ?? "", sku: k?.sku ?? "" }; });
   const [p, setP] = useState({ ...init, packs: fixPacks(init.packs), concerns: init.concerns || [], top_ingredients: [...(init.top_ingredients || []), "", "", ""].slice(0, 5) });
@@ -72,10 +72,12 @@ export default function ProductForm({ product, collections, tags, sizeKeys, cate
         </div>
       </div>
 
-      <div className="panel"><h2 style={{ marginTop: 0 }}>Five things to know</h2>
+      <div className="panel"><h2 style={{ marginTop: 0 }}>5 Things to Know</h2>
         <p className="mut" style={{ fontSize: 12, marginBottom: 10 }}>Top ingredients shown before Buy now, with the amount on the pack, e.g. “10% Vitamin C”. Leave blank to hide. Only state what is on the label.</p>
         <div className="af">{p.top_ingredients.map((t, i) => <Field key={i} f={{ name: "ti" + i, label: "Ingredient " + (i + 1), type: "text" }} value={t} onChange={(v) => setP((x) => ({ ...x, top_ingredients: x.top_ingredients.map((y, k) => (k === i ? v : y)) }))} />)}
           <Field f={{ name: "usp", label: "Key benefit line", type: "text", full: true }} value={p.usp} onChange={set("usp")} />
+          <Field f={{ name: "benefits", label: "Good for / benefits (comma separated)", type: "text", full: true, help: "Up to 4 short points shown under Good for, e.g. Conditions the scalp, Improves softness, Supports a healthier-looking routine." }} value={p.benefits} onChange={set("benefits")} />
+          <Field f={{ name: "best_for", label: "Best for (who it suits)", type: "text", full: true, help: "Short, e.g. Men and women, Women, Adults, Teenagers 13+. Shown in the facts strip. Blank = uses the default for this product." }} value={p.best_for} onChange={set("best_for")} />
           <Field f={{ name: "how_to_use", label: "How to use", type: "textarea", full: true }} value={p.how_to_use} onChange={set("how_to_use")} />
           <Field f={{ name: "ingredients_raw", label: "Full ingredient list", type: "textarea", full: true }} value={p.ingredients_raw} onChange={set("ingredients_raw")} />
         </div>

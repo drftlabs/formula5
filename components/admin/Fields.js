@@ -102,7 +102,7 @@ export function Field({ f, value, onChange }) {
         : f.type === "color" ? <div className="colorin"><input type="color" value={/^#[0-9a-f]{6}$/i.test(v) ? v : "#000000"} onChange={(e) => onChange(e.target.value.toUpperCase())} aria-label={f.label + " picker"} /><input id={id} type="text" className="in" value={v} onChange={(e) => onChange(e.target.value)} maxLength={7} /></div>
         : f.type === "productpick" ? <ProductPick f={f} value={value} onChange={onChange} />
         : f.type === "image" ? <ImageField value={v} onChange={onChange} folder={f.folder} hint={f.hint} />
-        : <input id={id} type={f.type === "number" ? "number" : "text"} value={v} onChange={(e) => onChange(f.type === "number" ? (e.target.value === "" ? "" : Number(e.target.value)) : e.target.value)} />}
+        : <input id={id} type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"} value={v} onChange={(e) => onChange(f.type === "number" ? (e.target.value === "" ? "" : Number(e.target.value)) : e.target.value)} />}
       {f.help && f.type !== "image" && <p className="hint">{f.help}</p>}
     </div>
   );

@@ -4,6 +4,7 @@ import Razorpay from "razorpay";
 import { serviceClient, sessionClient } from "@/lib/supabase/server";
 import { getSettings } from "@/lib/data";
 import { priceOrder, shippingCfg, checkDiscount } from "@/lib/pricing";
+import { comboSavings, validCombo } from "@/lib/combos";
 import { markPaid } from "@/lib/orders";
 import { waEnabled, cleanPhone } from "@/lib/whatsapp";
 
@@ -36,7 +37,7 @@ export async function POST(req) {
     if (!o?.verified_until || new Date(o.verified_until) < new Date()) return NextResponse.json({ error: "Please confirm your number on WhatsApp first." }, { status: 403 });
   }
   const ids = [...new Set(req_items.map((i) => i.id))];
-  const { data: prods } = await sb.from("products").select("id,name,price,packs,images,sizes,active,colors").in("id", ids);
+  const { data: prods } = await sb.from("products").select("id,slug,name,price,packs,images,sizes,active,colors").in("id", ids);
   const byId = Object.fromEntries((prods || []).map((p) => [p.id, p]));
   const { data: cl } = await sb.from("colors").select("slug,name");
   const cname = Object.fromEntries((cl || []).map((c) => [c.slug, c.name]));
@@ -47,9 +48,14 @@ export async function POST(req) {
     if ((Number(p.sizes?.[size]) || 0) < qty) return NextResponse.json({ error: `${p.name} (Pack ${size}) is out of stock or has fewer left than you asked for.` }, { status: 409 });
     const col = p.colors?.includes(it.color) ? it.color : p.colors?.[0] || "";
     const pk = Array.isArray(p.packs) ? p.packs.find((x) => String(x.n) === size) : null;
-    items.push({ id: p.id, name: p.name, size, qty, price: pk ? Number(pk.price) : Number(p.price), image: pics(p.images)[0] || "", color: cname[col] || col });
+    items.push({ id: p.id, name: p.name, size, qty, price: pk ? Number(pk.price) : Number(p.price), image: pics(p.images)[0] || "", color: cname[col] || col, slug: p.slug, combo: /^[a-z0-9-]+(\|[a-z0-9-]+){1,2}$/.test(String(it.combo || "")) ? String(it.combo) : "" });
   }
   const subtotal = items.reduce((t, i) => t + i.price * i.qty, 0);
+  let comboOff = 0;
+  if (items.some((i) => i.combo)) { // only real recommended combos earn the saving
+    const { data: cat } = await sb.from("products").select("id,slug,name,price,packs,sizes,active,category,concerns").eq("active", true);
+    comboOff = comboSavings(items, (key) => validCombo(key, cat || []));
+  }
 
   let rule = null, code = clean(body.code, 30).toUpperCase().replace(/[^A-Z0-9_-]/g, "");
   if (code) {
@@ -58,14 +64,14 @@ export async function POST(req) {
     if (!chk.ok) return NextResponse.json({ error: chk.error }, { status: 400 });
     rule = chk.rule;
   }
-  const price = priceOrder({ subtotal, method, cfg, discount: rule });
+  const price = priceOrder({ subtotal, method, cfg, discount: rule, comboOff });
 
 
   let userId = null;
   try { const ses = sessionClient(); const { data: { user } } = await ses.auth.getUser(); userId = user?.id || null; } catch {}
 
   const base = { user_id: userId, email: customer.email, phone: customer.phone, name: customer.name, shipping_address: address, items, subtotal, shipping: price.shipping, total: price.total, status: "pending_payment" };
-  const extra = { payment_method: method, amount_due: price.due, discount: price.discount, discount_code: price.discount ? rule.code : null };
+  const extra = { payment_method: method, amount_due: price.due, discount: price.discount, discount_code: price.discount ? (rule?.code || "COMBO") : null };
   let { data: order, error } = await sb.from("orders").insert({ ...base, ...extra }).select().single();
   if (error?.code === "42703" && method === "online" && !price.discount) ({ data: order, error } = await sb.from("orders").insert(base).select().single()); // migration_2 not run yet
   if (error) return NextResponse.json({ error: error.code === "42703" ? "Store setup is incomplete (run migration_2.sql in Supabase)." : "Could not create your order. Please try again." }, { status: 500 });
